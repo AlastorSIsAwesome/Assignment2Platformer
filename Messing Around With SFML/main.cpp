@@ -1,17 +1,20 @@
 #include <SFML/Graphics.hpp>
 #include "Collisions.h"
+#include <iostream>
 
+sf::Clock Clock;
+float DeltaTime = 0.f;
 
-float UpdatePlayer(float _playerYVelocity, float _YVelocity, float _dt)
+float UpdatePlayer(float _playerYVelocity, float _YVelocity)
 {
     if (_playerYVelocity < 4.f)
     {
-        _playerYVelocity += _YVelocity * _dt * 2; // (in/de)creaces
+        _playerYVelocity += _YVelocity * DeltaTime * 2; // (in/de)creaces
         return _playerYVelocity;
     }
 }
 
-
+const float ConstSpeed = .01f;
 
 
 int main()
@@ -38,8 +41,12 @@ int main()
     float PlayerYVelocity = 0.0f;
     float PlayerXVelocity = 0.0f;
 
+
+
     while (window.isOpen())
     {
+        DeltaTime = Clock.restart().asSeconds();
+
         while (const std::optional event = window.pollEvent()) // checks if the window is open
         {
             if (event->is<sf::Event::Closed>())
@@ -55,26 +62,26 @@ int main()
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::W))
         {
-            PlayerYVelocity = -2;
+            PlayerYVelocity = -ConstSpeed;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::S))
         {
-            PlayerYVelocity = 1;
+            PlayerYVelocity = ConstSpeed;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A))
         {
-            PlayerXVelocity = -1;
+            PlayerXVelocity = -ConstSpeed;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D))
         {
-            PlayerXVelocity = 1;
+            PlayerXVelocity = ConstSpeed;
         }
 
 
         window.clear();
 
 
-        PlayerYVelocity = UpdatePlayer(PlayerYVelocity, 1.0f, 0.0167); 
+        PlayerYVelocity = UpdatePlayer(PlayerYVelocity, 0.1f); 
         
         Player.move({ 0, PlayerYVelocity });
         if (Player.getGlobalBounds().findIntersection(Ground.getGlobalBounds()))
@@ -90,7 +97,7 @@ int main()
             Collisions::ResolveYCollisions(&Player, &Ground2, 1);
         }
 
-        Player.move({ PlayerXVelocity, 0 });
+        Player.move({ PlayerXVelocity, 0.0000167 });
         if (Player.getGlobalBounds().findIntersection(Ground.getGlobalBounds()))
         {
             Collisions::ResolveXCollisions(&Player, &Ground, 1);
