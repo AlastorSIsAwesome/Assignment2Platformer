@@ -2,19 +2,27 @@
 #include "Collisions.h"
 #include <iostream>
 
+#include "cLevel.h"
+
+#include<vector>
+
+
+cLevel MainLevel(15, 10);
+
+
 sf::Clock Clock;
 float DeltaTime = 0.f;
 
 float UpdatePlayer(float _playerYVelocity, float _YVelocity)
 {
-    if (_playerYVelocity < 4.f)
+    if (_playerYVelocity < 1.f)
     {
         _playerYVelocity += _YVelocity * DeltaTime * 2; // (in/de)creaces
-        return _playerYVelocity;
     }
+    return _playerYVelocity;
 }
 
-const float ConstSpeed = .01f;
+const float ConstSpeed = .1f;
 
 
 int main()
@@ -23,15 +31,9 @@ int main()
 
     // create objects
     sf::RectangleShape Player({ 100.f, 100.f });
-    sf::RectangleShape Ground({ 100.f, 100.f });
-    sf::RectangleShape Ground1({ 100.f, 100.f });
-    sf::RectangleShape Ground2({ 100.f, 100.f });
-    
-    Player.setPosition({ 300, 200 });
-    Ground.setPosition({ 300, 400 });
-    Ground1.setPosition({ 500, 400 });
-    Ground2.setPosition({ 700, 400 });
+    Player.setPosition({ 200.f, 300.f });
 
+   
 
     // Texture Setting
     sf::Texture PlayerTexture;
@@ -52,6 +54,7 @@ int main()
             if (event->is<sf::Event::Closed>())
                 window.close();
         }
+
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::R))
         {
@@ -78,46 +81,87 @@ int main()
         }
 
 
+
+
+
+
+
+
         window.clear();
 
 
-        PlayerYVelocity = UpdatePlayer(PlayerYVelocity, 0.1f); 
-        
+
+
+        // move player on y axix
+        PlayerYVelocity = UpdatePlayer(PlayerYVelocity, 0.1f);
         Player.move({ 0, PlayerYVelocity });
-        if (Player.getGlobalBounds().findIntersection(Ground.getGlobalBounds()))
+
+        // resolve collisions
+        for (int i = 0; i < MainLevel.LevelWallTiles.size(); i++)
         {
-            Collisions::ResolveYCollisions(&Player, &Ground, 1);
-        }
-        else if (Player.getGlobalBounds().findIntersection(Ground1.getGlobalBounds()))
-        {
-            Collisions::ResolveYCollisions(&Player, &Ground1, 1);
-        }
-        else if (Player.getGlobalBounds().findIntersection(Ground2.getGlobalBounds()))
-        {
-            Collisions::ResolveYCollisions(&Player, &Ground2, 1);
+            if (Player.getGlobalBounds().findIntersection(MainLevel.LevelWallTiles[i]->getGlobalBounds()))
+            {
+                Collisions::ResolveYCollisions(&Player, MainLevel.LevelWallTiles[i], 0);
+                PlayerYVelocity = 0.f;
+            }
         }
 
+
+
+
+        // move player on x axis
         Player.move({ PlayerXVelocity, 0.0000167 });
-        if (Player.getGlobalBounds().findIntersection(Ground.getGlobalBounds()))
+
+        // resolve collisions
+        for (int i = 0; i < MainLevel.LevelWallTiles.size(); i++)
         {
-            Collisions::ResolveXCollisions(&Player, &Ground, 1);
+            if (Player.getGlobalBounds().findIntersection(MainLevel.LevelWallTiles[i]->getGlobalBounds()))
+            {
+                Collisions::ResolveXCollisions(&Player, MainLevel.LevelWallTiles[i], 0);
+            }
         }
-        else if (Player.getGlobalBounds().findIntersection(Ground1.getGlobalBounds()))
+
+
+
+
+
+       
+
+
+        for (int i = 0; i < MainLevel.LevelWallTiles.size(); i++)
         {
-            Collisions::ResolveXCollisions(&Player, &Ground1, 1);
+            window.draw(*MainLevel.LevelWallTiles[i]);
         }
-        else if (Player.getGlobalBounds().findIntersection(Ground2.getGlobalBounds()))
-        {
-            Collisions::ResolveXCollisions(&Player, &Ground2, 1);
-        }
+      
 
 
         window.draw(Player);
-        window.draw(Ground);
-        window.draw(Ground1);
-        window.draw(Ground2);
+
 
         window.display();
     }
     return 0;
 }
+
+
+/*
+ std::vector<sf::RectangleShape> GroundBlocks;
+
+    for (int i = 0; i < 4; i++)
+    {
+        GroundBlocks();
+    }
+
+
+    sf::RectangleShape Ground({ 100.f, 100.f });
+    sf::RectangleShape Ground1({ 100.f, 100.f });
+    sf::RectangleShape Ground2({ 100.f, 100.f });
+
+
+
+    Player.setPosition({ 300, 200 });
+    Ground.setPosition({ 300, 400 });
+    Ground1.setPosition({ 500, 400 });
+    Ground2.setPosition({ 700, 400 });
+
+*/
