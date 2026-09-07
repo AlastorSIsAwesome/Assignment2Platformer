@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include <iostream>
 
 static class Collisions
 {
@@ -38,6 +39,8 @@ public:
 		{
 			float offset = -(_objA->getGlobalBounds().position.y + _objA->getGlobalBounds().size.y - _objB->getGlobalBounds().position.y);
 			_objA->move({ 0, offset });
+
+			std::cout << _objB->getGlobalBounds().position.x << " " << _objB->getGlobalBounds().position.y << std::endl;
 		}
 
 		// above the tile. 
@@ -45,6 +48,7 @@ public:
 		{
 			float offset = (_objB->getGlobalBounds().position.y + _objB->getGlobalBounds().size.y) - _objA->getGlobalBounds().position.y;
 			_objA->move({ 0, offset });
+
 		}
 	}
 };

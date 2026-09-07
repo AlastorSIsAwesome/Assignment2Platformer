@@ -146,11 +146,17 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cCharacter.cpp" />
+    <ClCompile Include="cLevel.cpp" />
+    <ClCompile Include="cPlayer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Physics.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cCharacter.h" />
+    <ClInclude Include="cLevel.h" />
     <ClInclude Include="Collisions.h" />
+    <ClInclude Include="cPlayer.h" />
     <ClInclude Include="Physics.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
