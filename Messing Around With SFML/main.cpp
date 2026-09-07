@@ -56,6 +56,10 @@ int main()
         }
 
 
+
+
+        // checking if any key is pressed
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::R))
         {
             Player.setPosition({ 300,200 });
@@ -67,36 +71,35 @@ int main()
         {
             PlayerYVelocity = -ConstSpeed;
         }
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::S))
         {
             PlayerYVelocity = ConstSpeed;
         }
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A))
         {
             PlayerXVelocity = -ConstSpeed;
         }
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D))
         {
             PlayerXVelocity = ConstSpeed;
         }
-
-
-
-
-
-
-
 
         window.clear();
 
 
 
 
-        // move player on y axix
+        // update y position
         PlayerYVelocity = UpdatePlayer(PlayerYVelocity, 0.1f);
+
+        // update collisons
         Player.move({ 0, PlayerYVelocity });
 
-        // resolve collisions
+        // check collisions
+        // resolve y collisions
         for (int i = 0; i < MainLevel.LevelWallTiles.size(); i++)
         {
             if (Player.getGlobalBounds().findIntersection(MainLevel.LevelWallTiles[i]->getGlobalBounds()))
@@ -109,10 +112,19 @@ int main()
 
 
 
-        // move player on x axis
+
+
+
+
+
+
+
+        // update x position
+        // update collisions
         Player.move({ PlayerXVelocity, 0.0000167 });
 
-        // resolve collisions
+        // check collisions
+        // resolve x collisions
         for (int i = 0; i < MainLevel.LevelWallTiles.size(); i++)
         {
             if (Player.getGlobalBounds().findIntersection(MainLevel.LevelWallTiles[i]->getGlobalBounds()))
@@ -120,6 +132,36 @@ int main()
                 Collisions::ResolveXCollisions(&Player, MainLevel.LevelWallTiles[i], 0);
             }
         }
+
+
+
+
+
+
+
+
+
+
+       
+
+
+
+
+        // move player on y axix
+        
+        
+
+        // resolve collisions
+
+
+
+
+
+        // move player on x axis
+      
+
+        // resolve collisions
+
 
 
 

@@ -37,7 +37,7 @@ public:
 		// underneath the tile
 		if (entityACenter.y <= entityBCenter.y)
 		{
-			float offset = -(_objA->getGlobalBounds().position.y + _objA->getGlobalBounds().size.y - _objB->getGlobalBounds().position.y + 1);
+			float offset = -(_objA->getGlobalBounds().position.y + _objA->getGlobalBounds().size.y - _objB->getGlobalBounds().position.y);
 			_objA->move({ 0, offset });
 
 			std::cout << _objB->getGlobalBounds().position.x << " " << _objB->getGlobalBounds().position.y << std::endl;
