@@ -30,7 +30,7 @@
     <ClCompile Include="cLevel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cCharacter.cpp">
+    <ClCompile Include="cEntity.cpp">
       <Filter>Source Files\Characters</Filter>
     </ClCompile>
     <ClCompile Include="cPlayer.cpp">
@@ -50,7 +50,7 @@
     <ClInclude Include="cLevel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cCharacter.h">
+    <ClInclude Include="cEntity.h">
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
     <ClInclude Include="cPlayer.h">

@@ -1,7 +1,7 @@
 #pragma once
-#include "cCharacter.h"
+#include "cEntity.h"
 class cPlayer :
-    public cCharacter
+    public cEntity
 {
 private:
 protected:

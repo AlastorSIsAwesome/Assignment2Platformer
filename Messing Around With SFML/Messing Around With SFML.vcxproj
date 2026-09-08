@@ -146,7 +146,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cCharacter.cpp" />
+    <ClCompile Include="cEntity.cpp" />
     <ClCompile Include="cLevel.cpp" />
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="cPlayer.cpp" />
@@ -154,7 +154,7 @@
     <ClCompile Include="Physics.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cCharacter.h" />
+    <ClInclude Include="cEntity.h" />
     <ClInclude Include="cLevel.h" />
     <ClInclude Include="Collisions.h" />
     <ClInclude Include="Controls.h" />

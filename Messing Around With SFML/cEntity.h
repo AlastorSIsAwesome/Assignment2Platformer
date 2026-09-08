@@ -1,26 +1,26 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class cCharacter
+class cEntity
 {
 private:
 protected:
 	sf::RectangleShape m_CharacterShape;
 	sf::Vector2f m_Size;
-	sf::Texture& m_Texture;
+
 
 public:
 
-	cCharacter(sf::Vector2f _size, sf::Texture& _texture);
+	cEntity(sf::Vector2f _size);
 
 
-	cCharacter();
-	~cCharacter();
+	cEntity();
+	~cEntity();
 
 
 	// why would a setter for charactershape be nessesary??
 
-	inline sf::RectangleShape* GetCharacterShape()
+	inline sf::RectangleShape* GetShape()
 	{
 		return &m_CharacterShape;
 	}
@@ -36,14 +36,4 @@ public:
 		return &m_Size;
 	}
 
-
-	inline void SetTexture(sf::Texture& _texture)
-	{
-		m_Texture = _texture;
-	}
-
-	inline sf::Texture* GetTexture()
-	{
-		return &m_Texture;
-	}
 };
