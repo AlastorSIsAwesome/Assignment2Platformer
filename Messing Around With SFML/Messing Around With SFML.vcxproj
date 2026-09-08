@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="cCharacter.cpp" />
     <ClCompile Include="cLevel.cpp" />
+    <ClCompile Include="Controls.cpp" />
     <ClCompile Include="cPlayer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Physics.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="cCharacter.h" />
     <ClInclude Include="cLevel.h" />
     <ClInclude Include="Collisions.h" />
+    <ClInclude Include="Controls.h" />
     <ClInclude Include="cPlayer.h" />
     <ClInclude Include="Physics.h" />
   </ItemGroup>

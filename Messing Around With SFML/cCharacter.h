@@ -7,9 +7,13 @@ private:
 protected:
 	sf::RectangleShape m_CharacterShape;
 	sf::Vector2f m_Size;
-	sf::Texture m_Texture;
+	sf::Texture& m_Texture;
 
 public:
+
+	cCharacter(sf::Vector2f _size, sf::Texture& _texture);
+
+
 	cCharacter();
 	~cCharacter();
 

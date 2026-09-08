@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "cLevel.h"
+#include "Controls.h"
 
 #include<vector>
 
@@ -33,6 +34,10 @@ int main()
     sf::RectangleShape Player({ 100.f, 100.f });
     Player.setPosition({ 200.f, 300.f });
 
+
+    // testing
+    sf::RectangleShape Test({ 100.f, 100.f });
+    Test.setPosition({ 300.f, 300.f });
    
 
     // Texture Setting
@@ -57,32 +62,31 @@ int main()
 
 
 
-
         // checking if any key is pressed
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::R))
+        if (Controls::IfKeyRPressed())
         {
             Player.setPosition({ 300,200 });
         }
 
         PlayerXVelocity = 0.0f;
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::W))
+        if (Controls::IfKeyWPressed())
         {
             PlayerYVelocity = -ConstSpeed;
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::S))
+        if (Controls::IfKeySPressed())
         {
             PlayerYVelocity = ConstSpeed;
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A))
+        if (Controls::IfKeyAPressed())
         {
             PlayerXVelocity = -ConstSpeed;
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D))
+        if (Controls::IfKeyDPressed())
         {
             PlayerXVelocity = ConstSpeed;
         }
@@ -109,7 +113,11 @@ int main()
             }
         }
 
-
+        if (Player.getGlobalBounds().findIntersection(Test.getGlobalBounds()))
+        {
+            Collisions::ResolveYCollisions(&Player, &Test, 0);
+            PlayerYVelocity = 0.f;
+        }
 
 
 
@@ -121,7 +129,7 @@ int main()
 
         // update x position
         // update collisions
-        Player.move({ PlayerXVelocity, 0.0000167 });
+        Player.move({ PlayerXVelocity, 0 });
 
         // check collisions
         // resolve x collisions
@@ -133,7 +141,10 @@ int main()
             }
         }
 
-
+        if (Player.getGlobalBounds().findIntersection(Test.getGlobalBounds()))
+        {
+            Collisions::ResolveXCollisions(&Player, &Test, 0);
+        }
 
 
 
@@ -175,6 +186,7 @@ int main()
             window.draw(*MainLevel.LevelWallTiles[i]);
         }
       
+        window.draw(Test);
 
 
         window.draw(Player);
