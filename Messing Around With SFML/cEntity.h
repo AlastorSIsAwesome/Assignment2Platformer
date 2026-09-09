@@ -8,10 +8,12 @@ protected:
 	sf::RectangleShape m_CharacterShape;
 	sf::Vector2f m_Size;
 
+	sf::Texture m_Texture;
 
 public:
 
 	cEntity(sf::Vector2f _size);
+	cEntity(sf::Vector2f _size, std::string _textureFilePath);
 
 
 	cEntity();
