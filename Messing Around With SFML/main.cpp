@@ -16,14 +16,14 @@ float DeltaTime = 0.f;
 
 float UpdatePlayer(float _playerYVelocity, float _YVelocity)
 {
-    if (_playerYVelocity < 1.f)
+    if (_playerYVelocity < 5.f)
     {
-        _playerYVelocity += _YVelocity * DeltaTime * 2; // (in/de)creaces
+        _playerYVelocity += _YVelocity * DeltaTime * 50; // (in/de)creaces
     }
     return _playerYVelocity;
 }
 
-const float ConstSpeed = .1f;
+const float ConstSpeed = 5.f;
 
 
 int main()
@@ -35,9 +35,7 @@ int main()
     Player.setPosition({ 200.f, 300.f });
 
 
-    // testing
-    sf::RectangleShape Test({ 100.f, 100.f });
-    Test.setPosition({ 300.f, 300.f });
+
    
 
     // Texture Setting
@@ -113,11 +111,6 @@ int main()
             }
         }
 
-        if (Player.getGlobalBounds().findIntersection(Test.getGlobalBounds()))
-        {
-            Collisions::ResolveYCollisions(&Player, &Test, 0);
-            PlayerYVelocity = 0.f;
-        }
 
 
 
@@ -139,11 +132,6 @@ int main()
             {
                 Collisions::ResolveXCollisions(&Player, MainLevel.LevelWallTiles[i], 0);
             }
-        }
-
-        if (Player.getGlobalBounds().findIntersection(Test.getGlobalBounds()))
-        {
-            Collisions::ResolveXCollisions(&Player, &Test, 0);
         }
 
 
@@ -181,12 +169,8 @@ int main()
        
 
 
-        for (int i = 0; i < MainLevel.LevelWallTiles.size(); i++)
-        {
-            window.draw(*MainLevel.LevelWallTiles[i]);
-        }
+        MainLevel.DrawAllTiles(window);
       
-        window.draw(Test);
 
 
         window.draw(Player);

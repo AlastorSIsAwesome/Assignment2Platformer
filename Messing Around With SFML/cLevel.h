@@ -24,7 +24,9 @@ public:
 
 	std::vector<sf::RectangleShape*> LevelTiles; // vecors of pointers to tiles that already exist // no collision
 	std::vector<sf::RectangleShape*> LevelWallTiles; // tiles with collision
+	std::vector<sf::RectangleShape*> LevelObsticalTiles; // tiles with collision and are obsticals
 	// if this doesnt work, try se floatrect vector
+
 
 	char levelArray[g_LevelWidth][g_LevelHight];
 
@@ -35,6 +37,15 @@ public:
 
 	void LoadLevel(std::string _filePath);
 	void UnloadLevel();
+
+
+	void DrawAllTiles(sf::RenderWindow& _window);
+
+	void DrawWallTiles(sf::RenderWindow &_window);
+	void DrawObsticalTiles(sf::RenderWindow& _window);
+
+
+
 
 
 };
