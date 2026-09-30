@@ -6,5 +6,9 @@ class cPlayer :
 private:
 protected:
 public:
+    cPlayer();
+    ~cPlayer();
+
+    // check movements
 };
 

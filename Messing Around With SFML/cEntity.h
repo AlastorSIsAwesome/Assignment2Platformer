@@ -5,10 +5,10 @@ class cEntity
 {
 private:
 protected:
-	sf::RectangleShape m_CharacterShape;
+	sf::RectangleShape m_EntityShape;
 	sf::Vector2f m_Size;
 
-	sf::Texture m_Texture;
+	sf::Texture m_Texture; // needed?
 
 public:
 
@@ -24,7 +24,7 @@ public:
 
 	inline sf::RectangleShape* GetShape()
 	{
-		return &m_CharacterShape;
+		return &m_EntityShape;
 	}
 
 
