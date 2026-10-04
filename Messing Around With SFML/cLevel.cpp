@@ -9,7 +9,7 @@ cLevel::cLevel(int _levelWidth, int _levelHeight)
 	{
 		for (int j = 0; j < m_LevelWidth; j++)
 		{
-
+			// do something here?
 		}
 	}
 	// set the wall's texture
@@ -55,8 +55,8 @@ void cLevel::LoadLevel(std::string _filePath)
 			// check for blocks in the level
 			if (levelArray[x][y] == 'X') // X -> default block
 			{
-				sf::RectangleShape* newBox = new sf::RectangleShape({ 64,64 });
-				newBox->setPosition(sf::Vector2f(x * 64, y * 64));
+				sf::RectangleShape* newBox = new sf::RectangleShape({ m_TileSize, m_TileSize });
+				newBox->setPosition(sf::Vector2f(x * m_TileSize, y * m_TileSize));
 				newBox->setTexture(&m_WallTexture);
 
 				// we may need extra logic for setting up colliders
@@ -64,11 +64,23 @@ void cLevel::LoadLevel(std::string _filePath)
 				LevelWallTiles.push_back(newBox);
 			}
 
+			// check for Platforms
+			if (levelArray[x][y] == 'L') // L -> Platform 
+			{
+				sf::RectangleShape* newBox = new sf::RectangleShape({ m_TileSize, m_TileSize });
+				newBox->setPosition(sf::Vector2f(x * m_TileSize, y * m_TileSize));
+				//newBox->setTexture(&); // Sunlight texture
+				newBox->setFillColor(sf::Color::Magenta);
+
+				LevelPlatformTiles.push_back(newBox);
+			}
+
+
 			// check for obsticals
 			if (levelArray[x][y] == 'V') // V -> obstical
 			{
-				sf::RectangleShape* newBox = new sf::RectangleShape({ 64,64 });
-				newBox->setPosition(sf::Vector2f(x * 64, y * 64));
+				sf::RectangleShape* newBox = new sf::RectangleShape({ m_TileSize, m_TileSize });
+				newBox->setPosition(sf::Vector2f(x * m_TileSize, y * m_TileSize));
 				//newBox->setTexture(&); // obstical texture
 				newBox->setFillColor(sf::Color::Red);
 
@@ -76,16 +88,28 @@ void cLevel::LoadLevel(std::string _filePath)
 			}
 
 
+			// check for Sunlight
+			if (levelArray[x][y] == 'S') // S -> Sunlight 
+			{
+				sf::RectangleShape* newBox = new sf::RectangleShape({ m_TileSize, m_TileSize });
+				newBox->setPosition(sf::Vector2f(x * m_TileSize, y * m_TileSize));
+				//newBox->setTexture(&); // Sunlight texture
+				newBox->setFillColor(sf::Color::Yellow);
+
+				LevelSunlightTiles.push_back(newBox);
+			}
+
 			// check for Checkpoints
 			if (levelArray[x][y] == 'C') // C -> check point
 			{
-				sf::RectangleShape* newBox = new sf::RectangleShape({ 64,64 });
-				newBox->setPosition(sf::Vector2f(x * 64, y * 64));
+				sf::RectangleShape* newBox = new sf::RectangleShape({ m_TileSize, m_TileSize });
+				newBox->setPosition(sf::Vector2f(x * m_TileSize, y * m_TileSize));
 				//newBox->setTexture(&); // checkpoint texture
 				newBox->setFillColor(sf::Color::Green);
 
 				LevelCheckPointTiles.push_back(newBox);
 			}
+
 
 			/*
 			player will be arranged in file like this:
@@ -108,15 +132,15 @@ void cLevel::LoadLevel(std::string _filePath)
 			// check for the player
 			if (levelArray[x][y] == 'P') // P -> Player position
 			{
-				m_PlayerPosition = sf::Vector2f(x * 64.f, y * 64.f);
+				m_PlayerPosition = sf::Vector2f(x * m_TileSize, y * m_TileSize);
 
 				if (levelArray[x][y + 1] == 'A')
 				{
-					m_ActiveCharacter = SisterAl;
+					m_StartingCharacter = SisterAl;
 				}
 				else
 				{
-					m_ActiveCharacter = SisterNiki;
+					m_StartingCharacter = SisterNiki;
 				}
 
 			}
@@ -128,6 +152,41 @@ void cLevel::LoadLevel(std::string _filePath)
 void cLevel::UnloadLevel()
 {
 	// for the given level. delete everything inside it
+	
+	// delete wall tiles
+	for (int i = 0; i < LevelWallTiles.size(); i++)
+	{
+		delete LevelWallTiles[i];
+		LevelWallTiles[i] = nullptr;
+	}
+
+	// delete Platform tiles
+	for (int i = 0; i < LevelObsticalTiles.size(); i++)
+	{
+		delete LevelPlatformTiles[i];
+		LevelPlatformTiles[i] = nullptr;
+	}
+
+	// delete Obstial Tiles
+	for (int i = 0; i < LevelObsticalTiles.size(); i++)
+	{
+		delete LevelObsticalTiles[i];
+		LevelObsticalTiles[i] = nullptr;
+	}
+
+	// delete Sunlight
+	for (int i = 0; i < LevelSunlightTiles.size(); i++)
+	{
+		delete LevelSunlightTiles[i];
+		LevelSunlightTiles[i] = nullptr;
+	}
+
+	// delete checkpoints
+	for (int i = 0; i < LevelCheckPointTiles.size(); i++)
+	{
+		delete LevelCheckPointTiles[i];
+		LevelCheckPointTiles[i] = nullptr;
+	}
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DRAW TILES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -148,12 +207,28 @@ void cLevel::DrawWallTiles(sf::RenderWindow& _window)
 	}
 }
 
+void cLevel::DrawPlatformTiles(sf::RenderWindow& _window)
+{
+	for (int i = 0; i < LevelPlatformTiles.size(); i++)
+	{
+		_window.draw(*LevelPlatformTiles[i]);
+	}
+}
+
 
 void cLevel::DrawObsticalTiles(sf::RenderWindow& _window)
 {
 	for (int i = 0; i < LevelObsticalTiles.size(); i++)
 	{
 		_window.draw(*LevelObsticalTiles[i]);
+	}
+}
+
+void cLevel::DrawSunlightTiles(sf::RenderWindow& _window)
+{
+	for (int i = 0; i < LevelSunlightTiles.size(); i++)
+	{
+		_window.draw(*LevelSunlightTiles[i]);
 	}
 }
 
@@ -177,6 +252,14 @@ sf::Shape* cLevel::CollisionWallTiles(sf::RectangleShape* _collidingWith)
 		}
 	}
 	// has passed all checks and is not colliding with anything, therefore return nullptr
+	return nullptr;
+}
+
+sf::Shape* cLevel::CollisionPlatformTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character)
+{
+
+
+
 	return nullptr;
 }
 

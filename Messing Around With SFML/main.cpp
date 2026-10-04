@@ -159,6 +159,9 @@ int main()
             PlayerYVelocity = 0.f;
         }
 
+        // checking collisions with wall tiles
+
+
 
         // Checking collisions with checkpoints
         g_CollidingWith = MainLevel.CollisionCheckPointTiles(g_Player.GetShape());

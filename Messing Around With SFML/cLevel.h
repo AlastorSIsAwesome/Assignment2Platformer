@@ -17,10 +17,12 @@ protected:
 	static const int m_LevelWidth = 20;
 	static const int m_LevelHight = 15;
 
+	const float m_TileSize = 64.f;
+
 	char levelArray[m_LevelWidth][m_LevelHight];
 
 	sf::Vector2f m_PlayerPosition;
-	ActiveCharacter m_ActiveCharacter;
+	ActiveCharacter m_StartingCharacter;
 
 
 	std::string m_WallTextureFilePath = "textures/alastorsphere.png";
@@ -45,34 +47,83 @@ public:
 
 	*/
 
+
+	/*
 	
+	LEVEL LOADING KEY:
+
+	O -> Nothing
+	X -> Default block
+	V -> Obstical // both Sister Al and Niki can't go through these
+
+	S -> Sunlight // only sister al can pass through, niki is vampire
+	L -> Platform // sister niki can jump through these. for al, this is a regular wall
+
+	C -> Checkpoint
+	 // Load Zone???
 
 
 
-	std::vector<sf::RectangleShape*> LevelTiles; // vecors of pointers to tiles that already exist // no collision
+	P
+	A
+	
+	or
+
+	P
+	N
+
+	is player
+	
+	
+	*/
+
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TILE VECTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	
 	std::vector<sf::RectangleShape*> LevelWallTiles; // tiles with collision
+	std::vector<sf::RectangleShape*> LevelPlatformTiles; // with collison, fully blocked off for al, niki can phase through the bottom
 	std::vector<sf::RectangleShape*> LevelObsticalTiles; // tiles with collision and are obsticals
+	std::vector<sf::RectangleShape*> LevelSunlightTiles; // with collison, but only for sister niki 
+
+
+
+
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  NO COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	
 	std::vector<sf::RectangleShape*> LevelCheckPointTiles; // tiles that are checkpoints // no collision
+	std::vector<sf::RectangleShape*> LevelTiles; // vecors of pointers to tiles that already exist // no collision
+
+
+
+
+
 	// if this doesnt work, try se floatrect vector
 
 
 
-
+		/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DE STRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
 	cLevel(int _levelWidth, int _levelHeight);
 	~cLevel();
 
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOAD/UNLOAD LEVEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 	void LoadLevel(std::string _filePath);
 	void UnloadLevel();
 
-
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DRAW TILES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	void DrawAllTiles(sf::RenderWindow& _window);
 
 
 	void DrawWallTiles(sf::RenderWindow &_window);
+	void DrawPlatformTiles(sf::RenderWindow& _window);
 	void DrawObsticalTiles(sf::RenderWindow& _window);
+	void DrawSunlightTiles(sf::RenderWindow& _window);
 	void DrawCheckPointTiles(sf::RenderWindow& _window);
+
+
+		/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 	/// <summary>
 	/// Checks every object of this type if there is a collision
@@ -82,9 +133,15 @@ public:
 	/// <returns> returns pointer of the object that was collided with </returns>
 	sf::Shape* CollisionWallTiles(sf::RectangleShape* _collidingWith);
 
+	sf::Shape* CollisionPlatformTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character);
+
 	sf::Shape* CollisionObsticalTiles(sf::RectangleShape* _collidingWith);
 
+	// make sure to only do this collision when niki is the active one
+	sf::Shape* CollisionPlatformTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character);
+
 	sf::Shape* CollisionCheckPointTiles(sf::RectangleShape* _collidingWith);
+
 
 
 
@@ -93,9 +150,9 @@ public:
 		return m_PlayerPosition;
 	}
 
-	inline ActiveCharacter GetActiveCharacter()
+	inline ActiveCharacter GetActiveCharacter() // NEEDED?
 	{
-		return m_ActiveCharacter;
+		return m_StartingCharacter;
 	}
 
 };
