@@ -10,9 +10,9 @@ public:
 
 	// WASD Keys (movement keys) 
 
-	static bool IfKeyWPressed()
+	static bool IfUpPressed()
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::W))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Space))
 		{
 			return true;
 		}
@@ -20,9 +20,9 @@ public:
 		return false;
 	}
 
-	static bool IfKeySPressed()
+	static bool IfDownPressed()
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::S))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Down))
 		{
 			return true;
 		}
@@ -30,9 +30,9 @@ public:
 		return false;
 	}
 
-	static bool IfKeyAPressed()
+	static bool IfLeftPressed()
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left))
 		{
 			return true;
 		}
@@ -40,20 +40,29 @@ public:
 		return false;
 	}
 
-	static bool IfKeyDPressed()
+	static bool IfRightPressed()
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left))
 		{
 			return true;
 		}
 
+		return false;
+	}
+
+	static bool IfChangePressed()
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C))
+		{
+			return true;
+		}
 		return false;
 	}
 
 
 	// Debugging keys
 
-	static bool IfKeyRPressed()
+	static bool IfResetPressed()
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::R))
 		{

@@ -4,48 +4,40 @@
 
 #include "cLevel.h"
 #include "Controls.h"
+#include "cPlayer.h"
 
 #include<vector>
 
 
 cLevel MainLevel(15, 10);
+cPlayer g_Player(MainLevel.GetPlayerPosition(), MainLevel.GetActiveCharacter());
 
 
 sf::Clock Clock;
 float DeltaTime = 0.f;
 
-float UpdatePlayer(float _playerYVelocity, float _YVelocity)
-{
-    if (_playerYVelocity < 5.f)
-    {
-        _playerYVelocity += _YVelocity * DeltaTime * 50; // (in/de)creaces
-    }
-    return _playerYVelocity;
-}
 
-const float ConstSpeed = 5.f;
+float UpdatePlayer(float _playerYVelocity, float _YVelocity);
+
+
+const float g_ConstXSpeed = 5.f;
+const float g_ConstYSpeed = 7.5f;
+
+
+sf::Shape* g_CollidingWith;
+sf::Vector2f g_CheckPointLocation({ 300.f, 300.f });
 
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode({ 1280, 720 }), "ALASTOR SPHERE RETURNS");
 
-    // create objects
-    sf::RectangleShape Player({ 100.f, 100.f });
-    Player.setPosition({ 200.f, 300.f });
 
-
-
-   
-
-    // Texture Setting
-    sf::Texture PlayerTexture;
-    PlayerTexture.loadFromFile("textures/alastorsphere.png");
-    Player.setTexture(&PlayerTexture);
 
     float PlayerYVelocity = 0.0f;
     float PlayerXVelocity = 0.0f;
 
+    AnimationType CurrentAnimationType = Idle;
 
 
     while (window.isOpen())
@@ -56,38 +48,93 @@ int main()
         {
             if (event->is<sf::Event::Closed>())
                 window.close();
+
+            // check if window is resized
+            if (const auto* resized = event->getIf<sf::Event::Resized>())
+            {
+                // update the veiw to the new sive of the window
+                sf::FloatRect visibleArea({ 0.f, 0.f }, sf::Vector2f(resized->size));
+                window.setView(sf::View(visibleArea));
+            }
+
+            if (const auto* labs = event->getIf < sf::Event::KeyPressed>())
+            {
+                // player has changed character
+                if (Controls::IfChangePressed())
+                {
+                    g_Player.SetActiveCharacter(); // changes the active character
+                    std::cout << "Changed to ";
+
+                    if (g_Player.GetActiveCharacter() == SisterAl)
+                    {
+                        std::cout << "Sister Al" << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << "Sister Niki" << std::endl;
+                    }
+
+
+                }
+            }
+
         }
 
+        //while (Controls::IfChangePressed())
+        //{
+        //    g_Player.SetActiveCharacter();
+        //    std::cout << "Change" << std::endl;
+        //}
+
+        // default animation is always idle
+        CurrentAnimationType = Idle;
+
+        // players slides when static
+        if (PlayerXVelocity != 0.0f)
+        {
+            if (PlayerXVelocity > 0)
+            {
+                PlayerXVelocity -= 1;
+            }
+            else
+            {
+                PlayerXVelocity += 1;
+            }
+        }
 
 
         // checking if any key is pressed
 
-        if (Controls::IfKeyRPressed())
+        if (Controls::IfResetPressed())
         {
-            Player.setPosition({ 300,200 });
+            g_Player.GetShape()->setPosition(g_CheckPointLocation);
+        }
+        
+        if (Controls::IfUpPressed() && PlayerYVelocity == 0) // check if player is on the floor
+        {
+            PlayerYVelocity = -g_ConstYSpeed;
         }
 
-        PlayerXVelocity = 0.0f;
-
-        if (Controls::IfKeyWPressed())
+        if (Controls::IfDownPressed())
         {
-            PlayerYVelocity = -ConstSpeed;
+            PlayerYVelocity = g_ConstYSpeed;
         }
 
-        if (Controls::IfKeySPressed())
+        if (Controls::IfLeftPressed())
         {
-            PlayerYVelocity = ConstSpeed;
+            PlayerXVelocity = -g_ConstXSpeed;
+            CurrentAnimationType = WalkingLeft;
         }
 
-        if (Controls::IfKeyAPressed())
+        if (Controls::IfRightPressed())
         {
-            PlayerXVelocity = -ConstSpeed;
+            PlayerXVelocity = g_ConstXSpeed;
+            CurrentAnimationType = WalkingRight;
         }
 
-        if (Controls::IfKeyDPressed())
-        {
-            PlayerXVelocity = ConstSpeed;
-        }
+
+
+
 
         window.clear();
 
@@ -98,22 +145,39 @@ int main()
         PlayerYVelocity = UpdatePlayer(PlayerYVelocity, 0.1f);
 
         // update collisons
-        Player.move({ 0, PlayerYVelocity });
+        g_Player.GetShape()->move({ 0, PlayerYVelocity });
 
-        // check collisions
-        // resolve y collisions
-        for (int i = 0; i < MainLevel.LevelWallTiles.size(); i++)
+        // check collisions    // resolve y collisions
+    
+
+
+        // checking collisions with wall tiles
+        g_CollidingWith = MainLevel.CollisionWallTiles(g_Player.GetShape());
+        if (g_CollidingWith != nullptr) // if there is a collision
         {
-            if (Player.getGlobalBounds().findIntersection(MainLevel.LevelWallTiles[i]->getGlobalBounds()))
-            {
-                Collisions::ResolveYCollisions(&Player, MainLevel.LevelWallTiles[i], 0);
-                PlayerYVelocity = 0.f;
-            }
+            Collisions::ResolveYCollisions(g_Player.GetShape(), g_CollidingWith, 0);
+            PlayerYVelocity = 0.f;
         }
 
 
+        // Checking collisions with checkpoints
+        g_CollidingWith = MainLevel.CollisionCheckPointTiles(g_Player.GetShape());
+        if (g_CollidingWith != nullptr) // if there is a collision
+        {
+            g_CheckPointLocation = g_CollidingWith->getPosition(); // set the checkpoint location to be the one that was collided with
+
+            // delete checkpoint?
+        }
+        // checkpoint comes before obsticals
 
 
+        // Checking collisions with obsticals
+        g_CollidingWith = MainLevel.CollisionObsticalTiles(g_Player.GetShape());
+        if (g_CollidingWith != nullptr) // if there is a collision
+        {
+            g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint
+            PlayerYVelocity = 0.f;
+        }
 
 
 
@@ -121,60 +185,47 @@ int main()
 
 
         // update x position
-        // update collisions
-        Player.move({ PlayerXVelocity, 0 });
+        g_Player.GetShape()->move({ PlayerXVelocity, 0 });
 
-        // check collisions
-        // resolve x collisions
-        for (int i = 0; i < MainLevel.LevelWallTiles.size(); i++)
+        // check collisions     // resolve x collisions
+        // checking collisions with wall tiles
+        g_CollidingWith = MainLevel.CollisionWallTiles(g_Player.GetShape());
+        if (g_CollidingWith != nullptr) // if there is a collision
         {
-            if (Player.getGlobalBounds().findIntersection(MainLevel.LevelWallTiles[i]->getGlobalBounds()))
-            {
-                Collisions::ResolveXCollisions(&Player, MainLevel.LevelWallTiles[i], 0);
-            }
+            Collisions::ResolveXCollisions(g_Player.GetShape(), g_CollidingWith, 0);
+            PlayerYVelocity = 0.f;
+        }
+
+
+        // Checking collisions with checkpoints
+        g_CollidingWith = MainLevel.CollisionCheckPointTiles(g_Player.GetShape());
+        if (g_CollidingWith != nullptr) // if there is a collision
+        {
+            g_CheckPointLocation = g_CollidingWith->getPosition(); // set the checkpoint location to be the one that was collided with
+
+            // delete checkpoint?
+        }
+        // checkpoint comes before obsticals
+
+
+        // Checking collisions with obsticals
+        g_CollidingWith = MainLevel.CollisionObsticalTiles(g_Player.GetShape());
+        if (g_CollidingWith != nullptr) // if there is a collision
+        {
+            g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint
+            PlayerYVelocity = 0.f;
         }
 
 
 
+        // animate player
+        g_Player.AnimatePlayer(CurrentAnimationType);
 
-
-
-
-
-       
-
-
-
-
-        // move player on y axix
-        
-        
-
-        // resolve collisions
-
-
-
-
-
-        // move player on x axis
-      
-
-        // resolve collisions
-
-
-
-
-
-
-       
 
 
         MainLevel.DrawAllTiles(window);
-      
 
-
-        window.draw(Player);
-
+        window.draw(*g_Player.GetShape());
 
         window.display();
     }
@@ -182,24 +233,11 @@ int main()
 }
 
 
-/*
- std::vector<sf::RectangleShape> GroundBlocks;
-
-    for (int i = 0; i < 4; i++)
+float UpdatePlayer(float _playerYVelocity, float _YVelocity)
+{
+    if (_playerYVelocity < 10.f)
     {
-        GroundBlocks();
+        _playerYVelocity += _YVelocity * DeltaTime * 100; // (in/de)creaces
     }
-
-
-    sf::RectangleShape Ground({ 100.f, 100.f });
-    sf::RectangleShape Ground1({ 100.f, 100.f });
-    sf::RectangleShape Ground2({ 100.f, 100.f });
-
-
-
-    Player.setPosition({ 300, 200 });
-    Ground.setPosition({ 300, 400 });
-    Ground1.setPosition({ 500, 400 });
-    Ground2.setPosition({ 700, 400 });
-
-*/
+    return _playerYVelocity;
+}
