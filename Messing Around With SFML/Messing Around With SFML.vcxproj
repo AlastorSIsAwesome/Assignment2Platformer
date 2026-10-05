@@ -146,6 +146,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cDebugWindow.cpp" />
     <ClCompile Include="cEntity.cpp" />
     <ClCompile Include="cLevel.cpp" />
     <ClCompile Include="Controls.cpp" />
@@ -154,6 +155,7 @@
     <ClCompile Include="Physics.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cDebugWindow.h" />
     <ClInclude Include="cEntity.h" />
     <ClInclude Include="cLevel.h" />
     <ClInclude Include="Collisions.h" />

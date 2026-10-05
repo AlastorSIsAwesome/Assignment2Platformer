@@ -72,6 +72,15 @@ public:
 		return false;
 	}
 
+	static bool IfDebugPressed()
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Escape))
+		{
+			return true;
+		}
+
+		return false;
+	}
 
 
 };
