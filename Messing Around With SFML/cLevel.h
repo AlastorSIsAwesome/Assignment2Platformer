@@ -14,7 +14,7 @@ class cLevel
 private:
 protected:
 	// maximum level dimentions
-	static const int m_LevelWidth = 20;
+	static const int m_LevelWidth = 30;
 	static const int m_LevelHight = 15;
 
 	const float m_TileSize = 64.f;
