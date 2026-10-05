@@ -194,7 +194,9 @@ void cLevel::UnloadLevel()
 void cLevel::DrawAllTiles(sf::RenderWindow& _window)
 {
 	DrawWallTiles(_window);
+	DrawPlatformTiles(_window);
 	DrawObsticalTiles(_window);
+	DrawSunlightTiles(_window);
 	DrawCheckPointTiles(_window);
 }
 
@@ -255,11 +257,30 @@ sf::Shape* cLevel::CollisionWallTiles(sf::RectangleShape* _collidingWith)
 	return nullptr;
 }
 
-sf::Shape* cLevel::CollisionPlatformTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character)
+sf::Shape* cLevel::CollisionPlatformTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character, float _yVelocity)
 {
+	if (_character == SisterAl) // regular collisions for sister al
+	{
+		for (int i = 0; i < LevelPlatformTiles.size(); i++)
+		{
+			if (_collidingWith->getGlobalBounds().findIntersection(LevelPlatformTiles[i]->getGlobalBounds()))
+			{
+				return LevelPlatformTiles[i];
+			}
+		}
+	}
+	else if (_yVelocity >= 0)//  if y velocity is 0 or greater, the player isn't jumping up
+	{
+		for (int i = 0; i < LevelPlatformTiles.size(); i++)
+		{
+			if (_collidingWith->getGlobalBounds().findIntersection(LevelPlatformTiles[i]->getGlobalBounds()))
+			{
+				return LevelPlatformTiles[i];
+			}
+		}
+	}
 
-
-
+	// will let the player phase through if Niki is active and playe is jumping up
 	return nullptr;
 }
 
@@ -273,6 +294,22 @@ sf::Shape* cLevel::CollisionObsticalTiles(sf::RectangleShape* _collidingWith)
 		}
 	}
 	// has passed all checks and is not colliding with anything, therefore return nullptr
+	return nullptr;
+}
+
+sf::Shape* cLevel::CollisionSunlightTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character)
+{
+	if (_character == SisterNiki) // will only look for collision if niki is active
+	{
+		for (int i = 0; i < LevelSunlightTiles.size(); i++)
+		{
+			if (_collidingWith->getGlobalBounds().findIntersection(LevelSunlightTiles[i]->getGlobalBounds()))
+			{
+				return LevelSunlightTiles[i];
+			}
+		}
+	}
+
 	return nullptr;
 }
 

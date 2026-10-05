@@ -21,7 +21,7 @@ float UpdatePlayer(float _playerYVelocity, float _YVelocity);
 
 
 const float g_ConstXSpeed = 5.f;
-const float g_ConstYSpeed = 7.5f;
+const float g_ConstYSpeed = 10.f;
 
 
 sf::Shape* g_CollidingWith;
@@ -42,7 +42,9 @@ int main()
 
     while (window.isOpen())
     {
+        // delta time
         DeltaTime = Clock.restart().asSeconds();
+        window.setFramerateLimit(60);
 
         while (const std::optional event = window.pollEvent()) // checks if the window is open
         {
@@ -80,6 +82,8 @@ int main()
 
         }
 
+        std::cout << PlayerYVelocity << std::endl;
+
         //while (Controls::IfChangePressed())
         //{
         //    g_Player.SetActiveCharacter();
@@ -90,21 +94,24 @@ int main()
         CurrentAnimationType = Idle;
 
         // players slides when static
-        if (PlayerXVelocity != 0.0f)
-        {
-            if (PlayerXVelocity > 0)
-            {
-                PlayerXVelocity -= 1;
-            }
-            else
-            {
-                PlayerXVelocity += 1;
-            }
-        }
-
+ 
+        //if (PlayerXVelocity != 0.0f)
+        //{
+        //    if (PlayerXVelocity > 0)
+        //    {
+        //        PlayerXVelocity -= 1;
+        //    }
+        //    else
+        //    {
+        //        PlayerXVelocity += 1;
+        //    }
+        //}
+        PlayerXVelocity = 0;
 
         // checking if any key is pressed
 
+
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONTROLS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         if (Controls::IfResetPressed())
         {
             g_Player.GetShape()->setPosition(g_CheckPointLocation);
@@ -136,10 +143,10 @@ int main()
 
 
 
-        window.clear();
+    
 
 
-
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Y COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         // update y position
         PlayerYVelocity = UpdatePlayer(PlayerYVelocity, 0.1f);
@@ -159,9 +166,15 @@ int main()
             PlayerYVelocity = 0.f;
         }
 
-        // checking collisions with wall tiles
 
 
+        // check collisions wth platforms
+        g_CollidingWith = MainLevel.CollisionPlatformTiles(g_Player.GetShape(), g_Player.GetActiveCharacter(), PlayerYVelocity);
+        if (g_CollidingWith != nullptr)// if there is a collision
+        {
+            Collisions::ResolveYCollisions(g_Player.GetShape(), g_CollidingWith, 0);
+            PlayerYVelocity = 0.f;
+        }
 
         // Checking collisions with checkpoints
         g_CollidingWith = MainLevel.CollisionCheckPointTiles(g_Player.GetShape());
@@ -182,10 +195,16 @@ int main()
             PlayerYVelocity = 0.f;
         }
 
+        // check sunlight collision
+        g_CollidingWith = MainLevel.CollisionSunlightTiles(g_Player.GetShape(), g_Player.GetActiveCharacter());
+        if (g_CollidingWith != nullptr) // if there is a collision
+        {
+            g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint
+            PlayerYVelocity = 0.f;
+        }
 
 
-
-
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ x COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         // update x position
         g_Player.GetShape()->move({ PlayerXVelocity, 0 });
@@ -194,6 +213,14 @@ int main()
         // checking collisions with wall tiles
         g_CollidingWith = MainLevel.CollisionWallTiles(g_Player.GetShape());
         if (g_CollidingWith != nullptr) // if there is a collision
+        {
+            Collisions::ResolveXCollisions(g_Player.GetShape(), g_CollidingWith, 0);
+            PlayerYVelocity = 0.f;
+        }
+
+        // check collisions wth platforms
+        g_CollidingWith = MainLevel.CollisionPlatformTiles(g_Player.GetShape(), g_Player.GetActiveCharacter(), PlayerYVelocity);
+        if (g_CollidingWith != nullptr)// if there is a collision
         {
             Collisions::ResolveXCollisions(g_Player.GetShape(), g_CollidingWith, 0);
             PlayerYVelocity = 0.f;
@@ -219,12 +246,22 @@ int main()
             PlayerYVelocity = 0.f;
         }
 
+        // check sunlight collision
+        g_CollidingWith = MainLevel.CollisionSunlightTiles(g_Player.GetShape(), g_Player.GetActiveCharacter());
+        if (g_CollidingWith != nullptr) // if there is a collision
+        {
+            g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint
+            PlayerYVelocity = 0.f;
+        }
 
 
         // animate player
         g_Player.AnimatePlayer(CurrentAnimationType);
 
 
+
+
+        window.clear();
 
         MainLevel.DrawAllTiles(window);
 

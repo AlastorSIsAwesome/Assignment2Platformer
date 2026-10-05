@@ -133,12 +133,12 @@ public:
 	/// <returns> returns pointer of the object that was collided with </returns>
 	sf::Shape* CollisionWallTiles(sf::RectangleShape* _collidingWith);
 
-	sf::Shape* CollisionPlatformTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character);
+	sf::Shape* CollisionPlatformTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character, float _yVelocity);
 
 	sf::Shape* CollisionObsticalTiles(sf::RectangleShape* _collidingWith);
 
 	// make sure to only do this collision when niki is the active one
-	sf::Shape* CollisionPlatformTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character);
+	sf::Shape* CollisionSunlightTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character);
 
 	sf::Shape* CollisionCheckPointTiles(sf::RectangleShape* _collidingWith);
 
