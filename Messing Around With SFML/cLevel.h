@@ -17,7 +17,6 @@ Mail : alastor.spear@mds.ac.nz
 #include <iostream>
 
 #include "CustomLibrary.h"
-#include "cSelectiveBlock.h"
 
 	/*
 		LEVEL DIMENTIONS:
@@ -39,6 +38,8 @@ Mail : alastor.spear@mds.ac.nz
 
 	S -> Sunlight // only sister al can pass through, niki is vampire
 	L -> Platform // sister niki can jump through these. for al, this is a regular wall
+
+	F -> FLower // player needs to collect all of these in a given level to progress
 
 	C -> Checkpoint
 	 // Load Zone???
@@ -76,6 +77,12 @@ protected:
 	std::string m_WallTextureFilePath = "textures/alastorsphere.png";
 	sf::Texture* m_ptrBlockTexture = nullptr;
 
+	std::string m_FlowerTextureFilePath = "textures/FlowerTextures.png";
+	sf::Texture* m_ptrFlowerTexture = nullptr;
+	sf::IntRect m_FlowerTextureRect;
+	int m_CurrentFlower = 0;
+	int m_NumOfFlowers = 0;
+
 public:
 
 
@@ -84,6 +91,7 @@ public:
 	std::vector<sf::RectangleShape*> LevelDefaultBlocks;
 	std::vector<sf::RectangleShape*> LevelObsticalBlocks;
 	std::vector<sf::RectangleShape*> LevelCheckPointBlocks;
+	std::vector<sf::RectangleShape*> LevelFLowerBlocks;
 
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SELECTIVE BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -111,6 +119,7 @@ public:
 	void DrawWallBlocks(sf::RenderWindow &_window);
 	void DrawObsticalBlocks(sf::RenderWindow& _window);
 	void DrawCheckPointBlocks(sf::RenderWindow& _window);
+	void DrawFlowerBlocks(sf::RenderWindow& _window);
 	void DrawPlatformBlocks(sf::RenderWindow& _window);
 	void DrawSunlightBlocks(sf::RenderWindow& _window);
 
@@ -129,6 +138,8 @@ public:
 	sf::Shape* CollisionObsticalBlocks(sf::RectangleShape* _collidingWith);
 
 	sf::Shape* CollisionCheckPointBlocks(sf::RectangleShape* _collidingWith);
+
+	sf::Shape* CollisionFlowerBlocks(sf::RectangleShape* _collidingWith);
 
 	sf::Shape* CollisionPlatformBlocks(sf::RectangleShape* _collidingWith, ActiveCharacter _character, float _yVelocity);
 
@@ -150,5 +161,9 @@ public:
 		return m_StartingCharacter;
 	}
 
+	inline int GetNumOfFlowersInLevel()
+	{
+		return m_NumOfFlowers;
+	}
 };
 

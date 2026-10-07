@@ -15,10 +15,19 @@ Mail : alastor.spear@mds.ac.nz
 //#include "cPlayer.h" // is throwing a hissy fit if if put this in the ,h file >:(
 
 
-cLevel::cLevel(int _levelWidth, int _levelHeight)
+cLevel::cLevel(std::string _levelFilePath)
+	: m_LevelFilePath(_levelFilePath)
 {
 	m_ptrBlockTexture = new sf::Texture();
 	m_ptrBlockTexture->loadFromFile(m_WallTextureFilePath);
+
+	// flower texture stuff
+	m_ptrFlowerTexture = new sf::Texture();
+	m_ptrFlowerTexture->loadFromFile(m_FlowerTextureFilePath);
+	m_FlowerTextureRect.position.x = m_CurrentFlower;
+	m_FlowerTextureRect.position.y = 0;
+	m_FlowerTextureRect.size.x = 16;
+	m_FlowerTextureRect.size.y = 32;
 }
 
 
@@ -28,14 +37,17 @@ cLevel::~cLevel()
 
 	delete m_ptrBlockTexture;
 	m_ptrBlockTexture = nullptr;
+
+	delete m_ptrFlowerTexture;
+	m_ptrFlowerTexture = nullptr;
 }
 
 
-void cLevel::LoadLevel(std::string _filePath)
+void cLevel::LoadLevel()
 {
 	// open level file and read from it
 	std::fstream loadFileStream;
-	loadFileStream.open(_filePath, std::ios::in);
+	loadFileStream.open(m_LevelFilePath, std::ios::in);
 
 	std::string loadFileString;
 	int lineCount = 0;
@@ -90,6 +102,26 @@ void cLevel::LoadLevel(std::string _filePath)
 				newBox->setFillColor(sf::Color::Green);
 
 				LevelCheckPointBlocks.push_back(newBox);
+
+				// first found checkpoint is the player starting position
+				m_PlayerPosition = sf::Vector2f(x * m_TileSize, y * m_TileSize);
+			}
+
+			// check for flowers
+			if (levelArray[x][y] == 'F' && m_NumOfFlowers < 6) // F -> Flower // also prevents more than 6 flowers being in a level at once
+			{
+				sf::RectangleShape* newBox = new sf::RectangleShape({ m_TileSize / 2, m_TileSize }); // flowers have half the width of a normal block
+				newBox->setPosition(sf::Vector2f(x * m_TileSize, y * m_TileSize));
+				newBox->setTexture(m_ptrFlowerTexture);
+				newBox->setTextureRect(m_FlowerTextureRect); // Flower texture
+
+				// move allong FlowerTextureRect by 16
+				m_CurrentFlower += 16;
+				m_FlowerTextureRect.position.x = m_CurrentFlower;
+
+				m_NumOfFlowers++;
+
+				LevelFLowerBlocks.push_back(newBox);
 			}
 
 
@@ -98,7 +130,7 @@ void cLevel::LoadLevel(std::string _filePath)
 			{
 				sf::RectangleShape* newBox = new sf::RectangleShape({ m_TileSize, m_TileSize });
 				newBox->setPosition(sf::Vector2f(x * m_TileSize, y * m_TileSize));
-				//newBox->setTexture(&); // Sunlight texture
+				//newBox->setTexture(&); // platform texture
 				newBox->setFillColor(sf::Color::Magenta);
 
 				LevelPlatformBlocks.push_back(newBox);
@@ -177,6 +209,14 @@ void cLevel::UnloadLevel()
 		LevelCheckPointBlocks[i] = nullptr;
 	}
 
+	// delete flowers
+	for (int i = 0; i < LevelFLowerBlocks.size(); i++)
+	{
+		delete LevelFLowerBlocks[i];
+		LevelFLowerBlocks[i] = nullptr;
+
+	}
+
 	// delete Platform tiles
 	for (int i = 0; i < LevelPlatformBlocks.size(); i++)
 	{
@@ -199,6 +239,7 @@ void cLevel::DrawAllBlocks(sf::RenderWindow& _window)
 	DrawWallBlocks(_window);
 	DrawObsticalBlocks(_window);
 	DrawCheckPointBlocks(_window);
+	DrawFlowerBlocks(_window);
 	DrawPlatformBlocks(_window);
 	DrawSunlightBlocks(_window);
 }
@@ -225,6 +266,14 @@ void cLevel::DrawCheckPointBlocks(sf::RenderWindow& _window)
 	for (int i = 0; i < LevelCheckPointBlocks.size(); i++)
 	{
 		_window.draw(*LevelCheckPointBlocks[i]);
+	}
+}
+
+void cLevel::DrawFlowerBlocks(sf::RenderWindow& _window)
+{
+	for (int i = 0; i < LevelFLowerBlocks.size(); i++)
+	{
+		_window.draw(*LevelFLowerBlocks[i]);
 	}
 }
 
@@ -281,6 +330,22 @@ sf::Shape* cLevel::CollisionCheckPointBlocks(sf::RectangleShape* _collidingWith)
 		if (_collidingWith->getGlobalBounds().findIntersection(LevelCheckPointBlocks[i]->getGlobalBounds()))
 		{
 			return LevelCheckPointBlocks[i];
+		}
+	}
+	// has passed all checks and is not colliding with anything, therefore return nullptr
+	return nullptr;
+}
+
+sf::Shape* cLevel::CollisionFlowerBlocks(sf::RectangleShape* _collidingWith)
+{
+	for (int i = 0; i < LevelFLowerBlocks.size(); i++)
+	{
+		if (_collidingWith->getGlobalBounds().findIntersection(LevelFLowerBlocks[i]->getGlobalBounds()))
+		{
+			// when a flower is found, it is destroyed
+
+
+			return LevelFLowerBlocks[i];
 		}
 	}
 	// has passed all checks and is not colliding with anything, therefore return nullptr

@@ -23,15 +23,18 @@ Mail : alastor.spear@mds.ac.nz
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FUNCTION DELEARATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void XCollisions();
-void YCollisions();
+void XCollisions(cLevel* _level);
+void YCollisions(cLevel* _level);
 
 float UpdatePlayer(float _playerYVelocity, float _YVelocity);
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INITALISING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-cLevel MainLevel(15, 10);
-cPlayer g_Player(MainLevel.GetPlayerPosition(), MainLevel.GetActiveCharacter());
+
+
+
+//cLevel MainLevel("Levels/Level1.txt");
+cPlayer g_Player(MainLevel.GetPlayerPosition(), MainLevel.GetActiveCharacter()); // 
 
 
 sf::Clock Clock;
@@ -49,11 +52,37 @@ sf::Vector2f g_CheckPointLocation({ 300.f, 300.f });
 
 int main()
 {
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INITALISING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+    std::vector<cLevel*> LevelVector;
+
+    cLevel* ptrLevel = new cLevel("Levels/Level1.txt");
+    LevelVector.push_back(ptrLevel);
+
+    ptrLevel = new cLevel("Levels/Level2.txt");
+    LevelVector.push_back(ptrLevel);
+
+    ptrLevel = new cLevel("Levels/Level3.txt");
+    LevelVector.push_back(ptrLevel);
+
+
+
+
+
+
+
+
+
+
+
+
+
     sf::RenderWindow window(sf::VideoMode({ 1800, 960 }), "The Wacky Adventures of Sister Al and Sister Niki!");
 
     AnimationType CurrentAnimationType = Idle;
 
-    MainLevel.LoadLevel("Levels/Level1.txt");
+    MainLevel.LoadLevel();
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MAIN GAME LOOP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -192,39 +221,46 @@ float UpdatePlayer(float _g_PlayerYVelocity, float _YVelocity)
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ X COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void XCollisions()
+void XCollisions(cLevel* _level)
 {
 
     // checking collisions with wall tiles
-    g_CollidingWith = MainLevel.CollisionWallBlocks(g_Player.GetShape());
+    g_CollidingWith = _level->CollisionWallBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         Collisions::ResolveXCollisions(g_Player.GetShape(), g_CollidingWith, 0); // resolve collision
     }
 
     // Checking collisions with obsticals
-    g_CollidingWith = MainLevel.CollisionObsticalBlocks(g_Player.GetShape());
+    g_CollidingWith = _level->CollisionObsticalBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint
     }
 
     // Checking collisions with checkpoints
-    g_CollidingWith = MainLevel.CollisionCheckPointBlocks(g_Player.GetShape());
+    g_CollidingWith = _level->CollisionCheckPointBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         g_CheckPointLocation = g_CollidingWith->getPosition(); // set the checkpoint location to be the one that was collided with
     }
 
+    // checking collisions with flowers
+    g_CollidingWith = _level->CollisionFlowerBlocks(g_Player.GetShape());
+    if (g_CollidingWith != nullptr)
+    {
+        // when a flower is found, add points?
+    }
+
     // check collisions wth platforms
-    g_CollidingWith = MainLevel.CollisionPlatformBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter(), g_PlayerYVelocity);
+    g_CollidingWith = _level->CollisionPlatformBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter(), g_PlayerYVelocity);
     if (g_CollidingWith != nullptr)// if there is a collision
     {
         Collisions::ResolveXCollisions(g_Player.GetShape(), g_CollidingWith, 0); // resolve collisions as normal
     }
 
     // check sunlight collision
-    g_CollidingWith = MainLevel.CollisionSunlightBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter());
+    g_CollidingWith = _level->CollisionSunlightBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint
@@ -234,10 +270,10 @@ void XCollisions()
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Y COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void YCollisions()
+void YCollisions(cLevel* _level)
 {
     // checking collisions with wall tiles
-    g_CollidingWith = MainLevel.CollisionWallBlocks(g_Player.GetShape());
+    g_CollidingWith = _level->CollisionWallBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         Collisions::ResolveYCollisions(g_Player.GetShape(), g_CollidingWith, 0);
@@ -246,7 +282,7 @@ void YCollisions()
     }
 
     // Checking collisions with obsticals
-    g_CollidingWith = MainLevel.CollisionObsticalBlocks(g_Player.GetShape());
+    g_CollidingWith = _level->.CollisionObsticalBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint
@@ -254,7 +290,7 @@ void YCollisions()
     }
 
     // Checking collisions with checkpoints
-    g_CollidingWith = MainLevel.CollisionCheckPointBlocks(g_Player.GetShape());
+    g_CollidingWith = _level->CollisionCheckPointBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         g_CheckPointLocation = g_CollidingWith->getPosition(); // set the checkpoint location to be the one that was collided with
@@ -263,7 +299,7 @@ void YCollisions()
     }
 
     // check collisions wth platforms
-    g_CollidingWith = MainLevel.CollisionPlatformBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter(), g_PlayerYVelocity);
+    g_CollidingWith = _level->CollisionPlatformBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter(), g_PlayerYVelocity);
     if (g_CollidingWith != nullptr)// if there is a collision
     {
         Collisions::ResolveYCollisions(g_Player.GetShape(), g_CollidingWith, 0);
@@ -271,7 +307,7 @@ void YCollisions()
     }
 
     // check sunlight collision
-    g_CollidingWith = MainLevel.CollisionSunlightBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter());
+    g_CollidingWith = _level->CollisionSunlightBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint
