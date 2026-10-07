@@ -1,20 +1,8 @@
 #pragma once
 #include "cEntity.h"
 #include <iostream>;
+#include "CustomLibrary.h"
 
-enum ActiveCharacter
-{
-    Default = 0,
-    SisterNiki,
-    SisterAl
-};
-
-enum AnimationType
-{
-    Idle = 0,
-    WalkingLeft,
-    WalkingRight
-};
 
 
 class cPlayer :

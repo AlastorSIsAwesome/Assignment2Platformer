@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Collisions.h"
 #include <iostream>
-
+#include "CustomLibrary.h"
 #include "cLevel.h"
 #include "Controls.h"
 #include "cPlayer.h"
@@ -35,7 +35,7 @@ sf::Vector2f g_CheckPointLocation({ 300.f, 300.f });
 int main()
 {
     sf::RenderWindow window(sf::VideoMode({ 1800, 960 }), "The Wacky Adventures of Sister Al and Sister Niki!");
-
+    
 
 
 

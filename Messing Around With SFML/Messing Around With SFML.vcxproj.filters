@@ -19,6 +19,18 @@
     <Filter Include="Source Files\Characters">
       <UniqueIdentifier>{914b412d-520c-4c92-9dbe-d747d4ae2993}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Buttons/UI">
+      <UniqueIdentifier>{9363c4d5-3ff9-4da4-9052-01befc3af5fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Buttons/UI">
+      <UniqueIdentifier>{4fdf2061-b22a-48ab-8378-569c6ad77b36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Blocks">
+      <UniqueIdentifier>{378fc436-a3fe-4ed8-a848-5fa04f3fe75e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Blocks">
+      <UniqueIdentifier>{2990746b-59b1-4946-bfef-9119ce5a0452}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,6 +53,18 @@
     </ClCompile>
     <ClCompile Include="cDebugWindow.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cButton.cpp">
+      <Filter>Source Files\Buttons/UI</Filter>
+    </ClCompile>
+    <ClCompile Include="cUIElement.cpp">
+      <Filter>Source Files\Buttons/UI</Filter>
+    </ClCompile>
+    <ClCompile Include="cText.cpp">
+      <Filter>Source Files\Buttons/UI</Filter>
+    </ClCompile>
+    <ClCompile Include="cBlock.cpp">
+      <Filter>Source Files\Blocks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,5 +89,25 @@
     <ClInclude Include="cDebugWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cButton.h">
+      <Filter>Header Files\Buttons/UI</Filter>
+    </ClInclude>
+    <ClInclude Include="cUIElement.h">
+      <Filter>Header Files\Buttons/UI</Filter>
+    </ClInclude>
+    <ClInclude Include="cText.h">
+      <Filter>Header Files\Buttons/UI</Filter>
+    </ClInclude>
+    <ClInclude Include="cBlock.h">
+      <Filter>Header Files\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TODO.TXT">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <fstream>
 #include <iostream>
-
+#include "CustomLibrary.h"
 #include "cPlayer.h"
 
 

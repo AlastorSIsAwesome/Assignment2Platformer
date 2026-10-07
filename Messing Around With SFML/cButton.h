@@ -8,10 +8,13 @@ class cButton
 private:
 protected:
 
+
 public:
 	cButton();
 	~cButton();
 
+	cButton(sf::Vector2f _position, sf::Vector2f _size);
 	
+	virtual void OnPressed() = 0;
 };
 
