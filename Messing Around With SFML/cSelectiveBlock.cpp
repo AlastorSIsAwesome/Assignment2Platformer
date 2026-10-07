@@ -1,4 +1,18 @@
+/*******************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2026 Media Design School at Strayer
+File Name : [cSelectiveBlock.cpp]
+Description : [Implimention file for cSelectiveBlock, depending on the character this block is looking for, will read collisions differently]
+Author : [Alastor Spear]
+Mail : alastor.spear@mds.ac.nz
+*******************************/
+
 #include "cSelectiveBlock.h"
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 cSelectiveBlock::cSelectiveBlock()
 {
@@ -14,6 +28,8 @@ cSelectiveBlock::cSelectiveBlock(char _identity, sf::Vector2f _position, sf::Vec
 {
     cBlock(_identity, _position, _size, _texture); // uses cBlock's constructor, will also create the m_ptrBlockShape
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 bool cSelectiveBlock::CollidingWithSelectiveBlock(sf::RectangleShape* _collidingWith, ActiveCharacter _activeCharacter)
 {

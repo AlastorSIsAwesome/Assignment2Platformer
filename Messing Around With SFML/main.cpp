@@ -1,13 +1,34 @@
+/*******************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2026 Media Design School at Strayer
+File Name : [main.cpp]
+Description : [File with the main implimentation of the game, also includes other function definitions regarding collisions and collision types]
+Author : [Alastor Spear]
+Mail : alastor.spear@mds.ac.nz
+*******************************/
+
 #include <SFML/Graphics.hpp>
-#include "Collisions.h"
 #include <iostream>
+#include <vector> // is this needed? cLevel has vector already
 #include "CustomLibrary.h"
+
+#include "Collisions.h"
+
 #include "cLevel.h"
 #include "Controls.h"
 #include "cPlayer.h"
 
-#include<vector>
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FUNCTION DELEARATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+void XCollisions();
+void YCollisions();
+
+float UpdatePlayer(float _playerYVelocity, float _YVelocity);
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INITALISING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 cLevel MainLevel(15, 10);
 cPlayer g_Player(MainLevel.GetPlayerPosition(), MainLevel.GetActiveCharacter());
@@ -15,12 +36,6 @@ cPlayer g_Player(MainLevel.GetPlayerPosition(), MainLevel.GetActiveCharacter());
 
 sf::Clock Clock;
 float DeltaTime = 0.f;
-
-
-float UpdatePlayer(float _playerYVelocity, float _YVelocity);
-
-void XCollisions();
-void YCollisions();
 
 const float g_ConstXSpeed = 5.f;
 const float g_ConstYSpeed = 10.f;
@@ -35,13 +50,11 @@ sf::Vector2f g_CheckPointLocation({ 300.f, 300.f });
 int main()
 {
     sf::RenderWindow window(sf::VideoMode({ 1800, 960 }), "The Wacky Adventures of Sister Al and Sister Niki!");
-    
-
-
-
 
     AnimationType CurrentAnimationType = Idle;
 
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MAIN GAME LOOP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     while (window.isOpen())
     {
@@ -51,6 +64,7 @@ int main()
 
         while (const std::optional event = window.pollEvent()) // checks if the window is open
         {
+            // check if the window is closed
             if (event->is<sf::Event::Closed>())
                 window.close();
 
@@ -61,7 +75,8 @@ int main()
                 sf::FloatRect visibleArea({ 0.f, 0.f }, sf::Vector2f(resized->size));
                 window.setView(sf::View(visibleArea));
             }
-
+            
+            // check if player has pressed a key
             if (const auto* labs = event->getIf < sf::Event::KeyPressed>())
             {
                 // player has changed character
@@ -78,37 +93,21 @@ int main()
                     {
                         std::cout << "Sister Niki" << std::endl;
                     }
-
-
                 }
             }
-
         }
-
+        // testing
         std::cout << g_PlayerYVelocity << std::endl;
 
 
         // default animation is always idle
         CurrentAnimationType = Idle;
 
-        // players slides when static
- 
-        //if (g_PlayerXVelocity != 0.0f)
-        //{
-        //    if (g_PlayerXVelocity > 0)
-        //    {
-        //        g_PlayerXVelocity -= 1;
-        //    }
-        //    else
-        //    {
-        //        g_PlayerXVelocity += 1;
-        //    }
-        //}
         g_PlayerXVelocity = 0;
 
 
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONTROLS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONTROLS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         if (Controls::IfResetPressed())
         {
             g_Player.GetShape()->setPosition(g_CheckPointLocation);
@@ -137,74 +136,60 @@ int main()
         }
 
 
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS & MOVEMENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS/MOVEMENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-
-
-            // update x position
+        // update x position
         g_Player.GetShape()->move({ g_PlayerXVelocity, 0 });
 
-        // check collisions     // resolve x collisions
-
+        // check collisions and resolve x collisions
         XCollisions();
 
 
-
-
-
-
-
-
-
-
-
-            // update y position
+        // update y position
         g_PlayerYVelocity = UpdatePlayer(g_PlayerYVelocity, 0.1f);
 
         // update collisons
         g_Player.GetShape()->move({ 0, g_PlayerYVelocity });
 
-        // check collisions    // resolve y collisions
-
+        // check collisions and resolve y collisions
         YCollisions();
 
 
-
-      
-
-
-
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ANIMATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ANIMATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         // animate player
         g_Player.AnimatePlayer(CurrentAnimationType);
 
 
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DRAW EVERYTHING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DRAW TO WINDOW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        window.clear();
+        window.clear(); // clear everything
 
         MainLevel.DrawAllTiles(window);
 
-        window.draw(*g_Player.GetShape());
+        window.draw(*g_Player.GetShape()); // player is above blocks
 
         window.display();
     }
     return 0;
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ UPDATE PLAYER WITH GRAVITY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 float UpdatePlayer(float _g_PlayerYVelocity, float _YVelocity)
 {
     if (_g_PlayerYVelocity < 10.f)
     {
         _g_PlayerYVelocity += _YVelocity * DeltaTime * 100; // (in/de)creaces
+        // add lerp?
     }
     return _g_PlayerYVelocity;
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ x COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ X COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 void XCollisions()
 {
 
@@ -222,7 +207,6 @@ void XCollisions()
         Collisions::ResolveXCollisions(g_Player.GetShape(), g_CollidingWith, 0);
     }
 
-
     // Checking collisions with checkpoints
     g_CollidingWith = MainLevel.CollisionCheckPointTiles(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
@@ -232,7 +216,6 @@ void XCollisions()
         // delete checkpoint?
     }
     // checkpoint comes before obsticals
-
 
     // Checking collisions with obsticals
     g_CollidingWith = MainLevel.CollisionObsticalTiles(g_Player.GetShape());
@@ -250,25 +233,20 @@ void XCollisions()
 }
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Y COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Y COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void YCollisions()
 {
-
-
-
-
     // checking collisions with wall tiles
     g_CollidingWith = MainLevel.CollisionWallTiles(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         Collisions::ResolveYCollisions(g_Player.GetShape(), g_CollidingWith, 0);
         g_PlayerYVelocity = 0.f;
-    }
-
-
+    
 
     // check collisions wth platforms
+    
     g_CollidingWith = MainLevel.CollisionPlatformTiles(g_Player.GetShape(), g_Player.GetActiveCharacter(), g_PlayerYVelocity);
     if (g_CollidingWith != nullptr)// if there is a collision
     {
@@ -285,7 +263,6 @@ void YCollisions()
         // delete checkpoint?
     }
     // checkpoint comes before obsticals
-
 
     // Checking collisions with obsticals
     g_CollidingWith = MainLevel.CollisionObsticalTiles(g_Player.GetShape());

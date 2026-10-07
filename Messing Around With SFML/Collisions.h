@@ -1,4 +1,8 @@
+/* THIS CODE WAS NOT WRITTEN BY ME, WAS TAKEN FROM THE WEEK 6 WORKSHOP */
+/* some comments have been added by me for my own understanding */
+
 #pragma once
+
 #include "SFML/Graphics.hpp"
 
 static class Collisions
