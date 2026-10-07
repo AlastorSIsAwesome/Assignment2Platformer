@@ -43,7 +43,6 @@ Mail : alastor.spear@mds.ac.nz
 	C -> Checkpoint
 	 // Load Zone???
 
-
 	P
 	A
 	
@@ -53,7 +52,6 @@ Mail : alastor.spear@mds.ac.nz
 	N
 
 	is player
-	
 	
 	*/
 
@@ -76,7 +74,7 @@ protected:
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TEXTURE MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 	std::string m_WallTextureFilePath = "textures/alastorsphere.png";
-	sf::Texture* m_ptrWallTexture = nullptr;
+	sf::Texture* m_ptrBlockTexture = nullptr;
 
 public:
 
@@ -90,8 +88,8 @@ public:
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SELECTIVE BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-	std::vector<cSelectiveBlock*> LevelPlatformBocks;
-	std::vector<cSelectiveBlock*> LevelSunlightBocks;
+	std::vector<cSelectiveBlock*> LevelPlatformBlocks;
+	std::vector<cSelectiveBlock*> LevelSunlightBlocks;
 
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -111,10 +109,11 @@ public:
 	void DrawAllBlocks(sf::RenderWindow& _window);
 
 	void DrawWallBlocks(sf::RenderWindow &_window);
-	void DrawPlatformBlocks(sf::RenderWindow& _window);
 	void DrawObsticalBlocks(sf::RenderWindow& _window);
-	void DrawSunlightBlocks(sf::RenderWindow& _window);
 	void DrawCheckPointBlocks(sf::RenderWindow& _window);
+	void DrawPlatformBlocks(sf::RenderWindow& _window);
+	void DrawSunlightBlocks(sf::RenderWindow& _window);
+
 
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -127,14 +126,16 @@ public:
 	/// <returns> returns pointer of the object that was collided with </returns>
 	sf::Shape* CollisionWallBlocks(sf::RectangleShape* _collidingWith);
 
-	sf::Shape* CollisionPlatformBlocks(sf::RectangleShape* _collidingWith, ActiveCharacter _character, float _yVelocity);
-
 	sf::Shape* CollisionObsticalBlockss(sf::RectangleShape* _collidingWith);
+
+	sf::Shape* CollisionCheckPointBlocks(sf::RectangleShape* _collidingWith);
+
+	sf::Shape* CollisionPlatformBlocks(sf::RectangleShape* _collidingWith, ActiveCharacter _character, float _yVelocity);
 
 	// make sure to only do this collision when niki is the active one
 	sf::Shape* CollisionSunlightBlocks(sf::RectangleShape* _collidingWith, ActiveCharacter _character);
 
-	sf::Shape* CollisionCheckPointBlocks(sf::RectangleShape* _collidingWith);
+
 
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
