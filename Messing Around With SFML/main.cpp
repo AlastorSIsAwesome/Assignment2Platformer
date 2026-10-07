@@ -53,6 +53,7 @@ int main()
 
     AnimationType CurrentAnimationType = Idle;
 
+    MainLevel.LoadLevel("Levels/Level1");
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MAIN GAME LOOP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -96,6 +97,7 @@ int main()
                 }
             }
         }
+
         // testing
         std::cout << g_PlayerYVelocity << std::endl;
 
@@ -165,7 +167,7 @@ int main()
 
         window.clear(); // clear everything
 
-        MainLevel.DrawAllTiles(window);
+        MainLevel.DrawAllBlocks(window);
 
         window.draw(*g_Player.GetShape()); // player is above blocks
 
@@ -194,38 +196,35 @@ void XCollisions()
 {
 
     // checking collisions with wall tiles
-    g_CollidingWith = MainLevel.CollisionWallTiles(g_Player.GetShape());
+    g_CollidingWith = MainLevel.CollisionWallBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
-        Collisions::ResolveXCollisions(g_Player.GetShape(), g_CollidingWith, 0);
+        Collisions::ResolveXCollisions(g_Player.GetShape(), g_CollidingWith, 0); // resolve collision
     }
-
-    // check collisions wth platforms
-    g_CollidingWith = MainLevel.CollisionPlatformTiles(g_Player.GetShape(), g_Player.GetActiveCharacter(), g_PlayerYVelocity);
-    if (g_CollidingWith != nullptr)// if there is a collision
-    {
-        Collisions::ResolveXCollisions(g_Player.GetShape(), g_CollidingWith, 0);
-    }
-
-    // Checking collisions with checkpoints
-    g_CollidingWith = MainLevel.CollisionCheckPointTiles(g_Player.GetShape());
-    if (g_CollidingWith != nullptr) // if there is a collision
-    {
-        g_CheckPointLocation = g_CollidingWith->getPosition(); // set the checkpoint location to be the one that was collided with
-
-        // delete checkpoint?
-    }
-    // checkpoint comes before obsticals
 
     // Checking collisions with obsticals
-    g_CollidingWith = MainLevel.CollisionObsticalTiles(g_Player.GetShape());
+    g_CollidingWith = MainLevel.CollisionObsticalBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint
     }
 
+    // Checking collisions with checkpoints
+    g_CollidingWith = MainLevel.CollisionCheckPointBlocks(g_Player.GetShape());
+    if (g_CollidingWith != nullptr) // if there is a collision
+    {
+        g_CheckPointLocation = g_CollidingWith->getPosition(); // set the checkpoint location to be the one that was collided with
+    }
+
+    // check collisions wth platforms
+    g_CollidingWith = MainLevel.CollisionPlatformBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter(), g_PlayerYVelocity);
+    if (g_CollidingWith != nullptr)// if there is a collision
+    {
+        Collisions::ResolveXCollisions(g_Player.GetShape(), g_CollidingWith, 0); // resolve collisions as normal
+    }
+
     // check sunlight collision
-    g_CollidingWith = MainLevel.CollisionSunlightTiles(g_Player.GetShape(), g_Player.GetActiveCharacter());
+    g_CollidingWith = MainLevel.CollisionSunlightBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint
@@ -238,42 +237,41 @@ void XCollisions()
 void YCollisions()
 {
     // checking collisions with wall tiles
-    g_CollidingWith = MainLevel.CollisionWallTiles(g_Player.GetShape());
+    g_CollidingWith = MainLevel.CollisionWallBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         Collisions::ResolveYCollisions(g_Player.GetShape(), g_CollidingWith, 0);
         g_PlayerYVelocity = 0.f;
-    
 
-    // check collisions wth platforms
-    
-    g_CollidingWith = MainLevel.CollisionPlatformTiles(g_Player.GetShape(), g_Player.GetActiveCharacter(), g_PlayerYVelocity);
-    if (g_CollidingWith != nullptr)// if there is a collision
-    {
-        Collisions::ResolveYCollisions(g_Player.GetShape(), g_CollidingWith, 0);
-        g_PlayerYVelocity = 0.f;
     }
-
-    // Checking collisions with checkpoints
-    g_CollidingWith = MainLevel.CollisionCheckPointTiles(g_Player.GetShape());
-    if (g_CollidingWith != nullptr) // if there is a collision
-    {
-        g_CheckPointLocation = g_CollidingWith->getPosition(); // set the checkpoint location to be the one that was collided with
-
-        // delete checkpoint?
-    }
-    // checkpoint comes before obsticals
 
     // Checking collisions with obsticals
-    g_CollidingWith = MainLevel.CollisionObsticalTiles(g_Player.GetShape());
+    g_CollidingWith = MainLevel.CollisionObsticalBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint
         g_PlayerYVelocity = 0.f;
     }
 
+    // Checking collisions with checkpoints
+    g_CollidingWith = MainLevel.CollisionCheckPointBlocks(g_Player.GetShape());
+    if (g_CollidingWith != nullptr) // if there is a collision
+    {
+        g_CheckPointLocation = g_CollidingWith->getPosition(); // set the checkpoint location to be the one that was collided with
+
+        // delete checkpoint?
+    }
+
+    // check collisions wth platforms
+    g_CollidingWith = MainLevel.CollisionPlatformBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter(), g_PlayerYVelocity);
+    if (g_CollidingWith != nullptr)// if there is a collision
+    {
+        Collisions::ResolveYCollisions(g_Player.GetShape(), g_CollidingWith, 0);
+        g_PlayerYVelocity = 0.f;
+    }
+
     // check sunlight collision
-    g_CollidingWith = MainLevel.CollisionSunlightTiles(g_Player.GetShape(), g_Player.GetActiveCharacter());
+    g_CollidingWith = MainLevel.CollisionSunlightBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint

@@ -68,8 +68,8 @@ protected:
 
 	char levelArray[m_LevelWidth][m_LevelHight];
 
-	sf::Vector2f m_PlayerPosition;
-	ActiveCharacter m_StartingCharacter;
+	sf::Vector2f m_PlayerPosition = sf::Vector2f(0.0f, 0.0f);
+	ActiveCharacter m_StartingCharacter = SisterNiki;
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TEXTURE MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -126,7 +126,7 @@ public:
 	/// <returns> returns pointer of the object that was collided with </returns>
 	sf::Shape* CollisionWallBlocks(sf::RectangleShape* _collidingWith);
 
-	sf::Shape* CollisionObsticalBlockss(sf::RectangleShape* _collidingWith);
+	sf::Shape* CollisionObsticalBlocks(sf::RectangleShape* _collidingWith);
 
 	sf::Shape* CollisionCheckPointBlocks(sf::RectangleShape* _collidingWith);
 

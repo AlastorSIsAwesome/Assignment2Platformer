@@ -26,8 +26,7 @@ public:
 		{
 			return true;
 		}
-
-		reurn false;
+		return false;
 	}
 
 	static bool IfDownPressed()
