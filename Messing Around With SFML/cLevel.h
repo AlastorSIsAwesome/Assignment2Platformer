@@ -3,8 +3,9 @@
 #include <fstream>
 #include <iostream>
 #include "CustomLibrary.h"
-#include "cPlayer.h"
+//#include "cPlayer.h"
 
+#include "cSelectiveBlock.h"
 
 
 // do getters and setters later
@@ -26,7 +27,7 @@ protected:
 
 
 	std::string m_WallTextureFilePath = "textures/alastorsphere.png";
-	sf::Texture m_WallTexture;
+	sf::Texture* m_ptrWallTexture = nullptr;
 
 public:
 
@@ -77,21 +78,33 @@ public:
 	
 	*/
 
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TILE VECTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	
-	std::vector<sf::RectangleShape*> LevelWallTiles; // tiles with collision
-	std::vector<sf::RectangleShape*> LevelPlatformTiles; // with collison, fully blocked off for al, niki can phase through the bottom
-	std::vector<sf::RectangleShape*> LevelObsticalTiles; // tiles with collision and are obsticals
-	std::vector<sf::RectangleShape*> LevelSunlightTiles; // with collison, but only for sister niki 
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BLOCK VECTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	std::vector<cBlock*> LevelDefaultBlocks;
+	std::vector<cBlock*> LevelObsticalBlocks;
+	std::vector<cBlock*> LevelCheckPointBlocks;
+
+
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SELECTIVE BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	std::vector<cSelectiveBlock*> LevelPlatformBocks;
+	std::vector<cSelectiveBlock*> LevelSunlightBocks;
+
+
+	///*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	//
+	//std::vector<sf::RectangleShape*> LevelWallTiles; // tiles with collision
+	//std::vector<sf::RectangleShape*> LevelPlatformTiles; // with collison, fully blocked off for al, niki can phase through the bottom
+	//std::vector<sf::RectangleShape*> LevelObsticalTiles; // tiles with collision and are obsticals
+	//std::vector<sf::RectangleShape*> LevelSunlightTiles; // with collison, but only for sister niki 
 
 
 
 
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  NO COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	
-	std::vector<sf::RectangleShape*> LevelCheckPointTiles; // tiles that are checkpoints // no collision
-	std::vector<sf::RectangleShape*> LevelTiles; // vecors of pointers to tiles that already exist // no collision
+	///*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  NO COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	//
+	//std::vector<sf::RectangleShape*> LevelCheckPointTiles; // tiles that are checkpoints // no collision 
+	//std::vector<sf::RectangleShape*> LevelTiles; // vecors of pointers to tiles that already exist // no collision // not needed?
 
 
 
@@ -104,7 +117,7 @@ public:
 		/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DE STRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
-	cLevel(int _levelWidth, int _levelHeight);
+	cLevel(int _levelWidth, int _levelHeight); // this constructor is not needed
 	~cLevel();
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOAD/UNLOAD LEVEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -113,14 +126,14 @@ public:
 	void UnloadLevel();
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DRAW TILES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	void DrawAllTiles(sf::RenderWindow& _window);
+	void DrawAllBlocks(sf::RenderWindow& _window);
 
 
-	void DrawWallTiles(sf::RenderWindow &_window);
-	void DrawPlatformTiles(sf::RenderWindow& _window);
-	void DrawObsticalTiles(sf::RenderWindow& _window);
-	void DrawSunlightTiles(sf::RenderWindow& _window);
-	void DrawCheckPointTiles(sf::RenderWindow& _window);
+	void DrawWallBlocks(sf::RenderWindow &_window);
+	void DrawPlatformBlocks(sf::RenderWindow& _window);
+	void DrawObsticalBlocks(sf::RenderWindow& _window);
+	void DrawSunlightBlocks(sf::RenderWindow& _window);
+	void DrawCheckPointBlocks(sf::RenderWindow& _window);
 
 
 		/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -131,16 +144,16 @@ public:
 	/// </summary>
 	/// <param name="_collidingWith"> the object being collided with </param>
 	/// <returns> returns pointer of the object that was collided with </returns>
-	sf::Shape* CollisionWallTiles(sf::RectangleShape* _collidingWith);
+	sf::Shape* CollisionWallBlocks(sf::RectangleShape* _collidingWith);
 
-	sf::Shape* CollisionPlatformTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character, float _yVelocity);
+	sf::Shape* CollisionPlatformBlocks(sf::RectangleShape* _collidingWith, ActiveCharacter _character, float _yVelocity);
 
-	sf::Shape* CollisionObsticalTiles(sf::RectangleShape* _collidingWith);
+	sf::Shape* CollisionObsticalBlockss(sf::RectangleShape* _collidingWith);
 
 	// make sure to only do this collision when niki is the active one
-	sf::Shape* CollisionSunlightTiles(sf::RectangleShape* _collidingWith, ActiveCharacter _character);
+	sf::Shape* CollisionSunlightBlocks(sf::RectangleShape* _collidingWith, ActiveCharacter _character);
 
-	sf::Shape* CollisionCheckPointTiles(sf::RectangleShape* _collidingWith);
+	sf::Shape* CollisionCheckPointBlocks(sf::RectangleShape* _collidingWith);
 
 
 

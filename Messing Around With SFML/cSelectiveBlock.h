@@ -1,6 +1,7 @@
 #pragma once
 #include "cBlock.h"
 #include "CustomLibrary.h"
+
 class cSelectiveBlock :
     public cBlock
 {
