@@ -53,7 +53,7 @@ int main()
 
     AnimationType CurrentAnimationType = Idle;
 
-    MainLevel.LoadLevel("Levels/Level1");
+    MainLevel.LoadLevel("Levels/Level1.txt");
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MAIN GAME LOOP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 

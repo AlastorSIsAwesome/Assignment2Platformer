@@ -29,9 +29,11 @@ protected:
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ POINTER MEMBERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	sf::Texture* m_ptrTexture = nullptr;
-	sf::RectangleShape* m_ptrBlockShape = nullptr;
 
+	sf::RectangleShape* m_ptrBlockShape = nullptr;
 public:
+
+
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	cBlock();
@@ -40,10 +42,8 @@ public:
 	cBlock(char _identity, sf::Vector2f _position, sf::Vector2f _size, sf::Texture* _texture);
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS/SETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	inline sf::RectangleShape* GetBlockShpae()
-	{
-		return m_ptrBlockShape;
-	}
+	sf::RectangleShape* GetBlockShape();
+
 	// BlockShape shouldn't need a setter
 
 
@@ -76,4 +76,3 @@ public:
 
 	bool CollidingWithBlock(sf::RectangleShape* _collidingWith);
 };
-

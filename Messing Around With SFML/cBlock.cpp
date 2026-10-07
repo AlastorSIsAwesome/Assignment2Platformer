@@ -31,6 +31,11 @@ cBlock::cBlock(char _identity, sf::Vector2f _position, sf::Vector2f _size, sf::T
 	m_ptrBlockShape->setPosition(m_Position); // adjust the block's position
 }
 
+sf::RectangleShape* cBlock::GetBlockShape()
+{
+	return m_ptrBlockShape;
+}
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -54,11 +59,13 @@ void cBlock::DrawBlock(sf::RenderWindow& _window)
 	_window.draw(*m_ptrBlockShape);
 }
 
-bool cBlock::CollidingWithBlock(sf::RectangleShape* _collidingWith)
-{
-	if (_collidingWith->getGlobalBounds().findIntersection(m_ptrBlockShape->getGlobalBounds()))
-	{
-		return true; // if there is a collision, return true
-	}
-	return false; // otherwise false
-}
+//bool cBlock::CollidingWithBlock(sf::RectangleShape* _collidingWith)
+//{
+//	if (m_ptrBlockShape->getGlobalBounds().findIntersection(_collidingWith->getGlobalBounds()))
+//	{
+//		return true; // if there is a collision, return true
+//	}
+//	return false; // otherwise false
+//}
+
+//_collidingWith->getGlobalBounds().findIntersection(m_ptrBlockShape->getGlobalBounds())

@@ -39,5 +39,12 @@ public:
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     bool CollidingWithSelectiveBlock(sf::RectangleShape* _collidingWith, ActiveCharacter _activeCharacter);
+
+
+    // delete?
+    inline sf::RectangleShape* GetSelectiveBlockShape()
+    {
+        return m_ptrBlockShape;
+    }
 };
 

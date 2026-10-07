@@ -81,15 +81,15 @@ public:
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	
-	std::vector<cBlock*> LevelDefaultBlocks;
-	std::vector<cBlock*> LevelObsticalBlocks;
-	std::vector<cBlock*> LevelCheckPointBlocks;
+	std::vector<sf::RectangleShape*> LevelDefaultBlocks;
+	std::vector<sf::RectangleShape*> LevelObsticalBlocks;
+	std::vector<sf::RectangleShape*> LevelCheckPointBlocks;
 
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SELECTIVE BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-	std::vector<cSelectiveBlock*> LevelPlatformBlocks;
-	std::vector<cSelectiveBlock*> LevelSunlightBlocks;
+	std::vector<sf::RectangleShape*> LevelPlatformBlocks;
+	std::vector<sf::RectangleShape*> LevelSunlightBlocks;
 
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
