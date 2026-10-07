@@ -1,41 +1,23 @@
+/*******************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2026 Media Design School at Strayer
+File Name : [cLevel.h]
+Description : [Headder file for class cLevel, outlines how the level keeps track of what is inside it]
+Author : [Alastor Spear]
+Mail : alastor.spear@mds.ac.nz
+*******************************/
+
 #pragma once
+
 #include <SFML/Graphics.hpp>
 #include <fstream>
 #include <iostream>
+
 #include "CustomLibrary.h"
-//#include "cPlayer.h"
-
 #include "cSelectiveBlock.h"
-
-
-// do getters and setters later
-
-class cLevel
-{
-private:
-protected:
-	// maximum level dimentions
-	static const int m_LevelWidth = 30;
-	static const int m_LevelHight = 15;
-
-	const float m_TileSize = 64.f;
-
-	char levelArray[m_LevelWidth][m_LevelHight];
-
-	sf::Vector2f m_PlayerPosition;
-	ActiveCharacter m_StartingCharacter;
-
-
-	std::string m_WallTextureFilePath = "textures/alastorsphere.png";
-	sf::Texture* m_ptrWallTexture = nullptr;
-
-public:
-
-	// work out level dimentions
-	// require:
-		// sprite size 
-		//	Characters are 32*32
-		// level size in tiles or sprites
 
 	/*
 		LEVEL DIMENTIONS:
@@ -47,8 +29,6 @@ public:
 		LEVEL IS MESURED IN TILES
 
 	*/
-
-
 	/*
 	
 	LEVEL LOADING KEY:
@@ -64,7 +44,6 @@ public:
 	 // Load Zone???
 
 
-
 	P
 	A
 	
@@ -78,56 +57,58 @@ public:
 	
 	*/
 
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BLOCK VECTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+class cLevel
+{
+private:
+protected:
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LEVEL MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	// maximum level dimentions
+	static const int m_LevelWidth = 30;
+	static const int m_LevelHight = 15;
 
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	const float m_TileSize = 64.f;
+
+	char levelArray[m_LevelWidth][m_LevelHight];
+
+	sf::Vector2f m_PlayerPosition;
+	ActiveCharacter m_StartingCharacter;
+
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TEXTURE MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+	std::string m_WallTextureFilePath = "textures/alastorsphere.png";
+	sf::Texture* m_ptrWallTexture = nullptr;
+
+public:
+
+
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	
 	std::vector<cBlock*> LevelDefaultBlocks;
 	std::vector<cBlock*> LevelObsticalBlocks;
 	std::vector<cBlock*> LevelCheckPointBlocks;
 
 
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SELECTIVE BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SELECTIVE BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 	std::vector<cSelectiveBlock*> LevelPlatformBocks;
 	std::vector<cSelectiveBlock*> LevelSunlightBocks;
 
 
-	///*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	//
-	//std::vector<sf::RectangleShape*> LevelWallTiles; // tiles with collision
-	//std::vector<sf::RectangleShape*> LevelPlatformTiles; // with collison, fully blocked off for al, niki can phase through the bottom
-	//std::vector<sf::RectangleShape*> LevelObsticalTiles; // tiles with collision and are obsticals
-	//std::vector<sf::RectangleShape*> LevelSunlightTiles; // with collison, but only for sister niki 
-
-
-
-
-	///*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  NO COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	//
-	//std::vector<sf::RectangleShape*> LevelCheckPointTiles; // tiles that are checkpoints // no collision 
-	//std::vector<sf::RectangleShape*> LevelTiles; // vecors of pointers to tiles that already exist // no collision // not needed?
-
-
-
-
-
-	// if this doesnt work, try se floatrect vector
-
-
-
-		/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DE STRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 	cLevel(int _levelWidth, int _levelHeight); // this constructor is not needed
 	~cLevel();
 
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOAD/UNLOAD LEVEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOAD/UNLOAD LEVEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 	void LoadLevel(std::string _filePath);
 	void UnloadLevel();
 
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DRAW TILES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	void DrawAllBlocks(sf::RenderWindow& _window);
 
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DRAW BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+	void DrawAllBlocks(sf::RenderWindow& _window);
 
 	void DrawWallBlocks(sf::RenderWindow &_window);
 	void DrawPlatformBlocks(sf::RenderWindow& _window);
@@ -136,7 +117,7 @@ public:
 	void DrawCheckPointBlocks(sf::RenderWindow& _window);
 
 
-		/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 	/// <summary>
 	/// Checks every object of this type if there is a collision
@@ -156,7 +137,7 @@ public:
 	sf::Shape* CollisionCheckPointBlocks(sf::RectangleShape* _collidingWith);
 
 
-
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 	inline sf::Vector2f GetPlayerPosition()
 	{

@@ -1,4 +1,18 @@
+/*******************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2026 Media Design School at Strayer
+File Name : [cButton.cpp]
+Description : [Implimentation for class cButton, outlines different constructors and how they are implimented]
+Author : [Alastor Spear]
+Mail : alastor.spear@mds.ac.nz
+*******************************/
+
 #include "cButton.h"
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 cButton::cButton()
 {

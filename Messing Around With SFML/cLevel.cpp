@@ -1,3 +1,15 @@
+/*******************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2026 Media Design School at Strayer
+File Name : [cLevel.cpp]
+Description : [Implimentation for class cLevel, loads the level from file and creates objects as nessesary. also draws and checks for collisions on said blocks]
+Author : [Alastor Spear]
+Mail : alastor.spear@mds.ac.nz
+*******************************/
+
 #include "cLevel.h"
 //
 ////#include "cPlayer.h" // is throwing a hissy fit if if put this in the ,h file >:(
@@ -328,6 +340,8 @@
 //
 //
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 cLevel::cLevel(int _levelWidth, int _levelHeight)
 {
 	m_ptrWallTexture = new sf::Texture();
@@ -339,6 +353,8 @@ cLevel::~cLevel()
 	delete m_ptrWallTexture;
 	m_ptrWallTexture = nullptr;
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOAD/UNLOAD LEVEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void cLevel::LoadLevel(std::string _filePath)
 {
@@ -467,6 +483,9 @@ void cLevel::UnloadLevel()
 {
 }
 
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DRAW BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 void cLevel::DrawAllBlocks(sf::RenderWindow& _window)
 {
 }
@@ -490,3 +509,6 @@ void cLevel::DrawSunlightBlocks(sf::RenderWindow& _window)
 void cLevel::DrawCheckPointBlocks(sf::RenderWindow& _window)
 {
 }
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

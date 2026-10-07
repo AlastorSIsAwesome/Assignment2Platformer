@@ -1,4 +1,18 @@
+/*******************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2026 Media Design School at Strayer
+File Name : [cEntity.cpp]
+Description : [Implimentation of class cEntity, describes many different ways to construct said class]
+Author : [Alastor Spear]
+Mail : alastor.spear@mds.ac.nz
+*******************************/
+
 #include "cEntity.h"
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 cEntity::cEntity(sf::Vector2f _size, sf::Vector2f _position)
 	: m_Size(_size)
@@ -49,6 +63,7 @@ cEntity::cEntity(sf::Vector2f _size, sf::Vector2f _position, std::string _textur
 
 cEntity::cEntity()
 {
+	// set texture
 	sf::Texture Texture;
 	Texture.loadFromFile("textures/alastorsphere.png"); // default texture if none was given
 	m_EntityShape.setTexture(&Texture);
@@ -56,6 +71,7 @@ cEntity::cEntity()
 
 cEntity::~cEntity()
 {
+	// no pointers, no need to do anything here
 }
 
 
