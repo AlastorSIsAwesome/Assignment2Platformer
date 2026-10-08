@@ -57,6 +57,9 @@
     <ClCompile Include="cText.cpp">
       <Filter>Source Files\Buttons/UI</Filter>
     </ClCompile>
+    <ClCompile Include="cIncrimentButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collisions.h">
@@ -90,6 +93,9 @@
       <Filter>Header Files\Buttons/UI</Filter>
     </ClInclude>
     <ClInclude Include="CustomLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cIncrimentButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

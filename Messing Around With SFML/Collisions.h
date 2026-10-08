@@ -5,7 +5,7 @@
 
 #include "SFML/Graphics.hpp"
 
-static class Collisions
+class Collisions
 {
 public:
 	static void ResolveXCollisions(sf::Shape* _objA, sf::Shape* _objB, bool _secondObjectWall) // bool is here if you want collision to react differently if the second object is a wall (or something else)

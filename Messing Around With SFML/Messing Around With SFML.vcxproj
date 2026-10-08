@@ -149,6 +149,7 @@
     <ClCompile Include="cButton.cpp" />
     <ClCompile Include="cDebugWindow.cpp" />
     <ClCompile Include="cEntity.cpp" />
+    <ClCompile Include="cIncrimentButton.cpp" />
     <ClCompile Include="cLevel.cpp" />
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="cPlayer.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="cButton.h" />
     <ClInclude Include="cDebugWindow.h" />
     <ClInclude Include="cEntity.h" />
+    <ClInclude Include="cIncrimentButton.h" />
     <ClInclude Include="cLevel.h" />
     <ClInclude Include="Collisions.h" />
     <ClInclude Include="Controls.h" />

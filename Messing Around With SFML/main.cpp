@@ -69,16 +69,11 @@ int main()
 
     LevelVector[CurrentLevel]->LoadLevel();
 
+    g_Player.SetPlayerPosition(LevelVector[CurrentLevel]->GetPlayerPosition());
 
 
 
-
-
-
-
-
-
-    sf::RenderWindow window(sf::VideoMode({ 1800, 960 }), "The Wacky Adventures of Sister Al and Sister Niki!");
+    sf::RenderWindow window(sf::VideoMode({ 1920, 960 }), "The Wacky Adventures of Sister Al and Sister Niki!");
 
     AnimationType CurrentAnimationType = Idle;
 
@@ -108,6 +103,13 @@ int main()
             // check if player has pressed a key
             if (const auto* labs = event->getIf < sf::Event::KeyPressed>())
             {
+                // if the player has oppended the debug window
+                if (Controls::IfDebugPressed())
+                {
+
+                }
+
+
                 // player has changed character
                 if (Controls::IfChangePressed())
                 {
@@ -194,6 +196,12 @@ int main()
                 LevelVector[CurrentLevel]->UnloadLevel();// unload the curent level
                 CurrentLevel++; //increase current level
                 LevelVector[CurrentLevel]->LoadLevel();// load next level
+
+                // spawn player at spawn point
+                g_Player.SetPlayerPosition(LevelVector[CurrentLevel]->GetPlayerPosition());
+
+                // set the player's starting character
+                g_Player.SetActiveCharacter(LevelVector[CurrentLevel]->GetActiveCharacter());
             }
         }
 
@@ -295,7 +303,7 @@ void YCollisions(cLevel* _level)
     }
 
     // Checking collisions with obsticals
-    g_CollidingWith = _level->.CollisionObsticalBlocks(g_Player.GetShape());
+    g_CollidingWith = _level->CollisionObsticalBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr) // if there is a collision
     {
         g_Player.GetShape()->setPosition(g_CheckPointLocation); // Send player back to last checkpoint

@@ -15,15 +15,44 @@ Mail : alastor.spear@mds.ac.nz
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 cButton::cButton()
+	:cUIElement() // calls default constructor for UIElement
 {
-	cUIElement(); // calls default constructor for UIElement
+	//cUIElement(); 
+	// set position and size
+	m_ButtonShape.setPosition(m_Position);
+	m_ButtonShape.setSize(m_Size);
+
+	// set textures
+	m_ptrButtonTexture = new sf::Texture();
+	m_ptrButtonTexture->loadFromFile(m_TextureFilePath);
+
+	// add texture to button
+	m_ButtonShape.setTexture(m_ptrButtonTexture);
 }
 
 cButton::~cButton()
 {
+	delete m_ptrButtonTexture;
+	m_ptrButtonTexture = nullptr; // delete pointer and set to null, prevent memory leaks
 }
 
-cButton::cButton(sf::Vector2f _position, sf::Vector2f _size)
-	: cUIElement(_position, _size) // calls cUIElement's constructor
+cButton::cButton(sf::Vector2f _position, sf::Vector2f _size, std::string _textureFilePath)
+	: cUIElement(_position, _size), /* calls cUIElement's constructor */ m_TextureFilePath(_textureFilePath)
 {
+	// set position and size
+	m_ButtonShape.setPosition(m_Position);
+	m_ButtonShape.setSize(m_Size);
+
+	// set textures
+	m_ptrButtonTexture = new sf::Texture();
+	m_ptrButtonTexture->loadFromFile(m_TextureFilePath);
+
+	// add texture to button
+	m_ButtonShape.setTexture(m_ptrButtonTexture);
 }
+
+void cButton::DrawButton(sf::RenderWindow& _window)
+{
+	_window.draw(m_ButtonShape);
+}
+

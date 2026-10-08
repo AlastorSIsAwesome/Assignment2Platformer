@@ -19,16 +19,24 @@ class cButton
 {
 private:
 protected:
+	std::string m_TextureFilePath = "textures/alastorsphere.png"; // default texture if none is set
+	sf::Texture* m_ptrButtonTexture = nullptr;
+
+	sf::RectangleShape m_ButtonShape;
+
 public:
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	cButton();
 	~cButton();
 
-	cButton(sf::Vector2f _position, sf::Vector2f _size);
-	
+	cButton(sf::Vector2f _position, sf::Vector2f _size, std::string _textureFilePath);
+
+
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BUTTON FUNCTIONALITY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-	virtual void OnPressed() = 0;
+	virtual void OnPressed(float* _propertyBeingAltered) = 0;
+
+	void DrawButton(sf::RenderWindow& _window);
 };
 
