@@ -34,9 +34,9 @@ float UpdatePlayer(float _playerYVelocity, float _YVelocity);
 
 
 //cLevel MainLevel("Levels/Level1.txt");
-cPlayer g_Player(MainLevel.GetPlayerPosition(), MainLevel.GetActiveCharacter()); // 
+cPlayer g_Player; // create the player
 
-
+// move this??
 sf::Clock Clock;
 float DeltaTime = 0.f;
 
@@ -54,6 +54,7 @@ int main()
 {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INITALISING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    unsigned int CurrentLevel = 0;
 
     std::vector<cLevel*> LevelVector;
 
@@ -66,8 +67,7 @@ int main()
     ptrLevel = new cLevel("Levels/Level3.txt");
     LevelVector.push_back(ptrLevel);
 
-
-
+    LevelVector[CurrentLevel]->LoadLevel();
 
 
 
@@ -82,8 +82,7 @@ int main()
 
     AnimationType CurrentAnimationType = Idle;
 
-    MainLevel.LoadLevel();
-
+    
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MAIN GAME LOOP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     while (window.isOpen())
@@ -173,7 +172,7 @@ int main()
         g_Player.GetShape()->move({ g_PlayerXVelocity, 0 });
 
         // check collisions and resolve x collisions
-        XCollisions();
+        XCollisions(LevelVector[CurrentLevel]);
 
 
         // update y position
@@ -183,7 +182,21 @@ int main()
         g_Player.GetShape()->move({ 0, g_PlayerYVelocity });
 
         // check collisions and resolve y collisions
-        YCollisions();
+        YCollisions(LevelVector[CurrentLevel]);
+
+
+        // after collisions, check if all flowers have been found
+        if (LevelVector[CurrentLevel]->FoundAllFlowersInLevel())
+        {
+            // on all flowers being found, check if final level has been reached
+            if (CurrentLevel < 2) // there are 3 levels, so if level 3 is reached nothing will happen
+            {
+                LevelVector[CurrentLevel]->UnloadLevel();// unload the curent level
+                CurrentLevel++; //increase current level
+                LevelVector[CurrentLevel]->LoadLevel();// load next level
+            }
+        }
+
 
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ANIMATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -196,7 +209,7 @@ int main()
 
         window.clear(); // clear everything
 
-        MainLevel.DrawAllBlocks(window);
+        LevelVector[CurrentLevel]->DrawAllBlocks(window);
 
         window.draw(*g_Player.GetShape()); // player is above blocks
 
@@ -249,7 +262,7 @@ void XCollisions(cLevel* _level)
     g_CollidingWith = _level->CollisionFlowerBlocks(g_Player.GetShape());
     if (g_CollidingWith != nullptr)
     {
-        // when a flower is found, add points?
+
     }
 
     // check collisions wth platforms

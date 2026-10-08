@@ -22,11 +22,6 @@ class cPlayer :
 {
 private:
 protected:
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ VELOCITY MEMBER VARIABLE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-    sf::Vector2f m_Velocity;
-
-
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PLAYER MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     //std::string m_TextureFilePath = ;
     sf::Texture m_Texture;
@@ -48,29 +43,6 @@ public:
     ~cPlayer();
 
 
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETTERS/GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-    inline float GetXVelocity()
-    {
-        return m_Velocity.x;
-    }
-
-    inline void SetXVelocity(float _xVelocity)
-    {
-        m_Velocity.x = _xVelocity;
-    }
-
-    inline float GetYVelocity()
-    {
-        return m_Velocity.y;
-    }
-
-    inline void SetYVelocity(float _yVelocity)
-    {
-        m_Velocity.y = _yVelocity;
-    }
-    // SORT OUT VELOCITY STUFFFF
-
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ANIMATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     void AnimatePlayer(AnimationType _animationType);
@@ -86,4 +58,8 @@ public:
     {
         return m_ActiveCharacter;
     }
+
+
+
+    void SetPlayerPosition(sf::Vector2f _position);
 };

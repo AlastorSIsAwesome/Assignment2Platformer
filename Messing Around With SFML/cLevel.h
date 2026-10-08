@@ -72,6 +72,9 @@ protected:
 	sf::Vector2f m_PlayerPosition = sf::Vector2f(0.0f, 0.0f);
 	ActiveCharacter m_StartingCharacter = SisterNiki;
 
+	std::string m_LevelFilePath;
+
+
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TEXTURE MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 	std::string m_WallTextureFilePath = "textures/alastorsphere.png";
@@ -93,6 +96,10 @@ public:
 	std::vector<sf::RectangleShape*> LevelCheckPointBlocks;
 	std::vector<sf::RectangleShape*> LevelFLowerBlocks;
 
+	/// <summary>
+	/// Every time a flower is found, that flower's number is switched to true
+	/// </summary>
+	std::vector<bool> FlowerFound;
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SELECTIVE BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -102,13 +109,13 @@ public:
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-	cLevel(int _levelWidth, int _levelHeight); // this constructor is not needed
+	cLevel(std::string _levelFilePath);
 	~cLevel();
 
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOAD/UNLOAD LEVEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-	void LoadLevel(std::string _filePath);
+	void LoadLevel();
 	void UnloadLevel();
 
 
@@ -147,6 +154,14 @@ public:
 	sf::Shape* CollisionSunlightBlocks(sf::RectangleShape* _collidingWith, ActiveCharacter _character);
 
 
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FLOWER FOUND CHECK ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	
+	/// <summary>
+	/// Checks to see if all of the flowers in the level have been found.
+	/// Will return true if all flowers are found, otherwise will return false.
+	/// </summary>
+	/// <returns> If all of the flowers have been found </returns>
+	bool FoundAllFlowersInLevel();
 
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

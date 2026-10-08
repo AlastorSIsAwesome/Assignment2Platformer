@@ -121,6 +121,8 @@ void cLevel::LoadLevel()
 
 				m_NumOfFlowers++;
 
+				FlowerFound.push_back(false);
+
 				LevelFLowerBlocks.push_back(newBox);
 			}
 
@@ -340,10 +342,10 @@ sf::Shape* cLevel::CollisionFlowerBlocks(sf::RectangleShape* _collidingWith)
 {
 	for (int i = 0; i < LevelFLowerBlocks.size(); i++)
 	{
-		if (_collidingWith->getGlobalBounds().findIntersection(LevelFLowerBlocks[i]->getGlobalBounds()))
+		// ignore the flower if it has already been collided with
+		if (_collidingWith->getGlobalBounds().findIntersection(LevelFLowerBlocks[i]->getGlobalBounds()) && !FlowerFound[i])
 		{
-			// when a flower is found, it is destroyed
-
+			FlowerFound[i] = true; // flower is found, so set to true
 
 			return LevelFLowerBlocks[i];
 		}
@@ -382,6 +384,21 @@ sf::Shape* cLevel::CollisionSunlightBlocks(sf::RectangleShape* _collidingWith, A
 		}
 	}
 	return nullptr;
+}
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FLOWER FOUND CHECK ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+bool cLevel::FoundAllFlowersInLevel()
+{
+	for (int i = 0; i < FlowerFound.size(); i++)
+	{
+		if (!FlowerFound[i]) // if there is one flower that has not been found, not all flowers hve been found so return false
+		{
+			return false;
+		}
+	}
+	return true; // all flowers have been found, therefore return true
 }
 
 

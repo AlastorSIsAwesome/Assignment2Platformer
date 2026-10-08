@@ -4,7 +4,7 @@ Media Design School
 Auckland
 New Zealand
 (c) 2026 Media Design School at Strayer
-File Name : []
+File Name : [cPlayer.cpp]
 Description : [Implimentation file for cPlayer, handels animations for walking and switching between characters]
 Author : [Alastor Spear]
 Mail : alastor.spear@mds.ac.nz
@@ -43,14 +43,33 @@ cPlayer::cPlayer(sf::Vector2f _position, ActiveCharacter _character)
 
 	// start animation clock
 	m_Clock.start();
-
-	// set velocity
-	m_Velocity = { 0.f, 0.f };
 }
 
 cPlayer::cPlayer()
 {
 	m_ActiveCharacter = SisterNiki;
+
+	// set size
+	m_EntityShape.setSize(sf::Vector2f(64.f, 128.f));
+
+	// set texture
+	m_EntityTexure.loadFromFile("textures/PlayerTexture.png");
+	m_EntityShape.setTexture(&m_EntityTexure);
+
+	// setting up animation stuff
+	m_EntityShape.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(32, 64)));
+
+
+	m_AnimationRect.position.y = 64; // sister niki starting position
+	
+
+	// animationRect setting
+	m_AnimationRect.position.x = 0;
+	m_AnimationRect.size.x = 32;
+	m_AnimationRect.size.y = 64;
+
+	// start animation clock
+	m_Clock.start();
 }
 
 cPlayer::~cPlayer()
@@ -128,4 +147,9 @@ void cPlayer::SetActiveCharacter()
 		m_ActiveCharacter = SisterAl;
 		m_AnimationRect.position.y = 0;
 	}
+}
+
+void cPlayer::SetPlayerPosition(sf::Vector2f _position)
+{
+	m_EntityShape.setPosition(_position);
 }
