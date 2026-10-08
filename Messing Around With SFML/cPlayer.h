@@ -20,7 +20,6 @@ Mail : alastor.spear@mds.ac.nz
 class cPlayer :
     public cEntity
 {
-private:
 protected:
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PLAYER MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     //std::string m_TextureFilePath = ;
@@ -60,6 +59,7 @@ public:
     }
 
 
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PLAYER POSITION SETTER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     void SetPlayerPosition(sf::Vector2f _position);
 };

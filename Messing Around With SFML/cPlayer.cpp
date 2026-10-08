@@ -149,6 +149,9 @@ void cPlayer::SetActiveCharacter()
 	}
 }
 
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PLAYER POSITION SETTER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 void cPlayer::SetPlayerPosition(sf::Vector2f _position)
 {
 	m_EntityShape.setPosition(_position);

@@ -11,6 +11,7 @@ Mail : alastor.spear@mds.ac.nz
 *******************************/
 
 #pragma once
+#include "SFML/Graphics.hpp"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ACTIVE CHARACTER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -30,3 +31,8 @@ enum AnimationType
     WalkingLeft,
     WalkingRight
 };
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FONT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+static sf::Font MainFont("textures/Fonts/GeistPixel-Regular.ttf");

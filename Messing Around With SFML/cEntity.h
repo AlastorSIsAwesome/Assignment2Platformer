@@ -16,7 +16,6 @@ Mail : alastor.spear@mds.ac.nz
 
 class cEntity
 {
-private:
 protected:
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ RECTANGLE SHAPE MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	

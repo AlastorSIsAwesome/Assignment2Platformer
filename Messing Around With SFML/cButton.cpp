@@ -51,6 +51,17 @@ cButton::cButton(sf::Vector2f _position, sf::Vector2f _size, std::string _textur
 	m_ButtonShape.setTexture(m_ptrButtonTexture);
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BUTTON FUNCTIONALITY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+bool cButton::CheckIfPressed(sf::Vector2f _mouseInput)
+{
+	if (m_ButtonShape.getGlobalBounds().contains(_mouseInput))
+	{
+		return true; // mouse is within the bounds of the button
+	}
+	return false;
+}
+
 void cButton::DrawButton(sf::RenderWindow& _window)
 {
 	_window.draw(m_ButtonShape);

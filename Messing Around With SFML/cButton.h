@@ -17,8 +17,8 @@ Mail : alastor.spear@mds.ac.nz
 class cButton
 	: public cUIElement
 {
-private:
 protected:
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	std::string m_TextureFilePath = "textures/alastorsphere.png"; // default texture if none is set
 	sf::Texture* m_ptrButtonTexture = nullptr;
 
@@ -34,6 +34,8 @@ public:
 
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BUTTON FUNCTIONALITY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+	bool CheckIfPressed(sf::Vector2f _mouseInput);
 
 	virtual void OnPressed(float* _propertyBeingAltered) = 0;
 

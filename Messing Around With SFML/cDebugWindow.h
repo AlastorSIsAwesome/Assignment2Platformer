@@ -12,14 +12,20 @@ Mail : alastor.spear@mds.ac.nz
 
 #pragma once
 
+#include <vector>
+
+#include "CustomLibrary.h"
+#include "cIncrimentButton.h"
+
 class cDebugWindow
 {
-private:
 protected:
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EDITABLE MEMBER-VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	float m_PlayerXVelocity;
 	float m_PlayerYVelocity;
 
+	std::vector<cIncrimentButton*> DebugWindowButtons;
+	std::vector<sf::Text*> DebugWindowText;
 
 public:
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CON/DESTRUCTORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -27,10 +33,14 @@ public:
 	cDebugWindow();
 	~cDebugWindow();
 
-
+	
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DEBUG WINDOW FUNCTIONALITY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 	void OpenDebugWindow();
+
+	void CheckIfButtonPressed(sf::Vector2f _mouseInput, float* _xVelocity, float* _yVelocity);
+
+	void DrawDebugWindow(sf::RenderWindow& _window);
 
 };
 

@@ -17,11 +17,14 @@ Mail : alastor.spear@mds.ac.nz
 
 #include "Collisions.h"
 
+#include "cDebugWindow.h"
 #include "cLevel.h"
 #include "Controls.h"
 #include "cPlayer.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FUNCTION DELEARATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void RunDebugWindow();
 
 void XCollisions(cLevel* _level);
 void YCollisions(cLevel* _level);
@@ -30,18 +33,10 @@ float UpdatePlayer(float _playerYVelocity, float _YVelocity);
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INITALISING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-
-
-
-//cLevel MainLevel("Levels/Level1.txt");
 cPlayer g_Player; // create the player
 
-// move this??
-sf::Clock Clock;
-float DeltaTime = 0.f;
-
-const float g_ConstXSpeed = 5.f;
-const float g_ConstYSpeed = 10.f;
+float g_ConstXSpeed = 5.f;
+float g_ConstYSpeed = 10.f;
 
 float g_PlayerYVelocity = 0.0f;
 float g_PlayerXVelocity = 0.0f;
@@ -50,10 +45,41 @@ sf::Shape* g_CollidingWith;
 sf::Vector2f g_CheckPointLocation({ 300.f, 300.f });
 
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TIME VALUES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+sf::Clock g_Clock;
+float g_DeltaTime = 0.f;
+
+
 int main()
 {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INITALISING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    sf::RectangleShape Background(sf::Vector2f(1920.f, 960.f)); // create background and set to cyan
+    Background.setPosition(sf::Vector2f(0.f, 0.f));
+    Background.setFillColor(sf::Color::Cyan);
+
+    sf::RectangleShape Explanation(sf::Vector2f(696.f, 361.f)); // create explanation and give it the explanation texture
+    Explanation.setPosition(sf::Vector2f(1150.f, 64.f));
+
+    sf::Texture ExplanationTexture;
+    ExplanationTexture.loadFromFile("textures/Explanation.png");
+    
+    Explanation.setTexture(&ExplanationTexture);
+
+
+    sf::RectangleShape WinScreen(sf::Vector2f(1921.f, 961.f)); // create explanation and give it the explanation texture
+    WinScreen.setPosition(sf::Vector2f(1.f, 1.f));
+
+    sf::Texture WinScreenTexture;
+    WinScreenTexture.loadFromFile("textures/WinScreen1.png");
+
+    WinScreen.setTexture(&WinScreenTexture);
+
+    bool WinCondition = false;
+
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LEVEL INITALISING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     unsigned int CurrentLevel = 0;
 
     std::vector<cLevel*> LevelVector;
@@ -71,9 +97,10 @@ int main()
 
     g_Player.SetPlayerPosition(LevelVector[CurrentLevel]->GetPlayerPosition());
 
-
-
     sf::RenderWindow window(sf::VideoMode({ 1920, 960 }), "The Wacky Adventures of Sister Al and Sister Niki!");
+
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ANIMATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     AnimationType CurrentAnimationType = Idle;
 
@@ -83,7 +110,7 @@ int main()
     while (window.isOpen())
     {
         // delta time
-        DeltaTime = Clock.restart().asSeconds();
+        g_DeltaTime = g_Clock.restart().asSeconds();
         window.setFramerateLimit(60);
 
         while (const std::optional event = window.pollEvent()) // checks if the window is open
@@ -106,7 +133,8 @@ int main()
                 // if the player has oppended the debug window
                 if (Controls::IfDebugPressed())
                 {
-
+                    // pause everything and open debug window
+                    RunDebugWindow();
                 }
 
 
@@ -203,6 +231,10 @@ int main()
                 // set the player's starting character
                 g_Player.SetActiveCharacter(LevelVector[CurrentLevel]->GetActiveCharacter());
             }
+            else
+            {
+                WinCondition = true;
+            }
         }
 
 
@@ -217,13 +249,71 @@ int main()
 
         window.clear(); // clear everything
 
+        window.draw(Background); // draw background
+
+        if (CurrentLevel == 0)
+        {
+            // only show this if the current level is level 1
+            window.draw(Explanation);
+        }
+
         LevelVector[CurrentLevel]->DrawAllBlocks(window);
 
         window.draw(*g_Player.GetShape()); // player is above blocks
 
+        if (WinCondition)
+        {
+            window.draw(WinScreen); // shows winscreen on win condition
+        }
+
+
         window.display();
     }
     return 0;
+}
+
+
+void RunDebugWindow()
+{
+    sf::RenderWindow debugWindow(sf::VideoMode({ 1000, 1000 }), "Debug Window");
+
+    cDebugWindow DebugWindowManager;
+
+    while (debugWindow.isOpen())
+    {
+        while (const std::optional event = debugWindow.pollEvent()) // checks if the window is open
+        {
+            // check if the window is closed
+            if (event->is<sf::Event::Closed>())
+                debugWindow.close();
+
+            // check if window is resized
+            if (const auto* resized = event->getIf<sf::Event::Resized>())
+            {
+                // update the veiw to the new sive of the window
+                sf::FloatRect visibleArea({ 0.f, 0.f }, sf::Vector2f(resized->size));
+                debugWindow.setView(sf::View(visibleArea));
+            }
+
+            // if the user clicks anything, check all collision bounds
+            if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
+            {
+                sf::Vector2f MousePosition = sf::Vector2f(sf::Mouse::getPosition(debugWindow).x, sf::Mouse::getPosition(debugWindow).y);
+                
+                DebugWindowManager.CheckIfButtonPressed(MousePosition, &g_ConstXSpeed, &g_ConstYSpeed);
+            }
+
+
+
+        }
+
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DRAW TO WINDOW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        debugWindow.clear();
+
+        DebugWindowManager.DrawDebugWindow(debugWindow);
+
+        debugWindow.display();
+    }
 }
 
 
@@ -233,14 +323,14 @@ float UpdatePlayer(float _g_PlayerYVelocity, float _YVelocity)
 {
     if (_g_PlayerYVelocity < 10.f)
     {
-        _g_PlayerYVelocity += _YVelocity * DeltaTime * 100; // (in/de)creaces
-        // add lerp?
+        _g_PlayerYVelocity += _YVelocity * g_DeltaTime * 100; // (in/de)creaces
     }
     return _g_PlayerYVelocity;
 }
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ X COLLISIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 
 void XCollisions(cLevel* _level)
 {
@@ -275,7 +365,8 @@ void XCollisions(cLevel* _level)
 
     // check collisions wth platforms
     g_CollidingWith = _level->CollisionPlatformBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter(), g_PlayerYVelocity);
-    if (g_CollidingWith != nullptr)// if there is a collision
+    // if the player is pressing the S key and is colliding with platform, allow fallthrough
+    if (g_CollidingWith != nullptr && !Controls::IfDownPressed())// if there is a collision AND the player is not pressing S (or down)
     {
         Collisions::ResolveXCollisions(g_Player.GetShape(), g_CollidingWith, 0); // resolve collisions as normal
     }
@@ -321,7 +412,8 @@ void YCollisions(cLevel* _level)
 
     // check collisions wth platforms
     g_CollidingWith = _level->CollisionPlatformBlocks(g_Player.GetShape(), g_Player.GetActiveCharacter(), g_PlayerYVelocity);
-    if (g_CollidingWith != nullptr)// if there is a collision
+    // if the player is pressing the S key and is colliding with platform, allow fallthrough
+    if (g_CollidingWith != nullptr && !Controls::IfDownPressed())// if there is a collision AND the player is not pressing S (or down)
     {
         Collisions::ResolveYCollisions(g_Player.GetShape(), g_CollidingWith, 0);
         g_PlayerYVelocity = 0.f;

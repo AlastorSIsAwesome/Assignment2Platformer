@@ -30,9 +30,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Physics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cLevel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,18 +51,12 @@
     <ClCompile Include="cUIElement.cpp">
       <Filter>Source Files\Buttons/UI</Filter>
     </ClCompile>
-    <ClCompile Include="cText.cpp">
-      <Filter>Source Files\Buttons/UI</Filter>
-    </ClCompile>
     <ClCompile Include="cIncrimentButton.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Buttons/UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collisions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cLevel.h">
@@ -89,18 +80,15 @@
     <ClInclude Include="cUIElement.h">
       <Filter>Header Files\Buttons/UI</Filter>
     </ClInclude>
-    <ClInclude Include="cText.h">
-      <Filter>Header Files\Buttons/UI</Filter>
-    </ClInclude>
     <ClInclude Include="CustomLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cIncrimentButton.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Buttons/UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="TODO.TXT">
+    <Text Include="README.TXT">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>

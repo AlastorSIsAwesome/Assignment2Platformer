@@ -58,7 +58,6 @@ Mail : alastor.spear@mds.ac.nz
 
 class cLevel
 {
-private:
 protected:
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LEVEL MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	// maximum level dimentions
@@ -77,7 +76,7 @@ protected:
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TEXTURE MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-	std::string m_WallTextureFilePath = "textures/alastorsphere.png";
+	std::string m_WallTextureFilePath = "textures/FloorTexture.png";
 	sf::Texture* m_ptrBlockTexture = nullptr;
 
 	std::string m_FlowerTextureFilePath = "textures/FlowerTextures.png";
@@ -87,8 +86,6 @@ protected:
 	int m_NumOfFlowers = 0;
 
 public:
-
-
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BLOCKS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	
 	std::vector<sf::RectangleShape*> LevelDefaultBlocks;
@@ -150,7 +147,6 @@ public:
 
 	sf::Shape* CollisionPlatformBlocks(sf::RectangleShape* _collidingWith, ActiveCharacter _character, float _yVelocity);
 
-	// make sure to only do this collision when niki is the active one
 	sf::Shape* CollisionSunlightBlocks(sf::RectangleShape* _collidingWith, ActiveCharacter _character);
 
 
@@ -171,7 +167,7 @@ public:
 		return m_PlayerPosition;
 	}
 
-	inline ActiveCharacter GetActiveCharacter() // NEEDED?
+	inline ActiveCharacter GetActiveCharacter()
 	{
 		return m_StartingCharacter;
 	}

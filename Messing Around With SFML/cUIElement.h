@@ -16,7 +16,6 @@ Mail : alastor.spear@mds.ac.nz
 
 class cUIElement
 {
-private:
 protected:
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SHAPE RECT MEMBER VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
